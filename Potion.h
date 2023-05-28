@@ -1,5 +1,5 @@
 /***********************************************************************
- * File: StatusEffect.h
+ * File: DataFormat.h
  * Author: B11115016
  * Create Date: 2023/05/29
  * Editor: B11115016,
@@ -10,9 +10,7 @@
 
 #include "Pokemon.h"
 
-//abstract class，Manage Burn、Poison
-
-class StatusEffect
+class Potion
 {
     
 };

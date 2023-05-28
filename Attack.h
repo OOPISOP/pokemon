@@ -8,3 +8,11 @@
 ***********************************************************************/
 #pragma once
 
+#include "Pokemon.h"
+
+//Implement damage logic
+
+class Attack
+{
+    
+};

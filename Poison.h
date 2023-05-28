@@ -7,3 +7,13 @@
  * Description: This C++ program is to Test Pokemons' battle ability.
 ***********************************************************************/
 #pragma once
+
+#include "StatusEffect.h"
+#include "Pokemon.h"
+
+//Inherit StatusEffect
+
+class Poison : public StatusEffect
+{
+    
+};

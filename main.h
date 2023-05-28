@@ -10,19 +10,8 @@
 
 // Standard library
 #include <iostream>
-#include <math.h>		// pow() and sqrt()
-#include <ctime>		// for time loop function
-#include <vector>       // Object vectors
-#include <fstream>      // File saving and loading
 
 // Custom library
 #include "Game.h"
-#include "Player.h"
-#include "Attack.h"
-#include "Pokemon.h"
-#include "StatusEffect.h"
-#include "Burn.h"
-#include "Poison.h"
-#include "DataFormat.h"
 
 using namespace std;

@@ -7,3 +7,12 @@
  * Description: This C++ program is to Test Pokemons' battle ability.
 ***********************************************************************/
 #pragma once
+
+#include "Pokemon.h"
+
+//Implement Pokemon data、Move data、Game data 、 Test Case format
+
+class DataFormat
+{
+    
+};

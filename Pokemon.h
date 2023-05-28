@@ -8,3 +8,16 @@
 ***********************************************************************/
 #pragma once
 
+#include "DataFormat.h"
+#include "StatusEffect.h"
+#include "Attack.h"
+#include "Poison.h"
+#include "Burn.h"
+#include "Potion.h"
+
+//record Pokemon basic data、status、attack、add hp、reduce hp、Potion、Paralysis...
+
+class Pokemon
+{
+    
+};

@@ -8,3 +8,12 @@
 ***********************************************************************/
 #pragma once
 
+#include "StatusEffect.h"
+#include "Pokemon.h"
+
+//Inherit StatusEffect
+
+class Burn : public StatusEffect
+{
+    
+};

@@ -8,3 +8,11 @@
 ***********************************************************************/
 #pragma once
 
+#include "Pokemon.h"
+
+//current Pokemon 、 swap Pokemon 、print all Pokemon status、  check...
+
+class Player
+{
+    
+};
