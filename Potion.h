@@ -10,7 +10,7 @@
 
 #include "Pokemon.h"
 
-class Potion
+class Potion 
 {
     
 };
