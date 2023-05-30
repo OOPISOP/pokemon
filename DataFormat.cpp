@@ -37,7 +37,8 @@ vector<Pokemon>& DataFormat::loadPokemonData(string fileName)
     while(getline(pokemonData,line))
     {   
         vector<string>lines;//data lines
-        while(getline(pokemonData,line))//get all data lines
+        lines.push_back(line);
+        for(int i=0;getline(pokemonData,line),i<2;i++)//get firstline to thirdline
         {
             lines.push_back(line);
         }
