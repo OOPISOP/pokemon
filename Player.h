@@ -9,10 +9,14 @@
 #pragma once
 
 #include "Pokemon.h"
+#include <vector>
+using namespace std;
 
 //current Pokemon 、 swap Pokemon 、print all Pokemon status、  check...
 
 class Player
 {
-    
+private:
+    vector<Pokemon> pokemons;
+public:
 };

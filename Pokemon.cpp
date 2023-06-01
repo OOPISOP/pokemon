@@ -89,9 +89,9 @@ Attribute stringToType(string type)
 }
 
 //Pokemon Constructor
-Pokemon::Pokemon(State state, string name, vector<Attribute> types, double maxHP, double atk, double def, double spAtk, double spDef, double speed)
-{
-    this->state = state;
+Pokemon::Pokemon(string name, vector<Attribute> types, double maxHP, double atk, double def, double spAtk, double spDef, double speed)
+{   
+    initStateList();
     this->name = name;
     this->types = types;
     this->maxHP = maxHP;
@@ -106,6 +106,14 @@ Pokemon::Pokemon(State state, string name, vector<Attribute> types, double maxHP
 Pokemon::~Pokemon()
 {
 
+}
+//Init State
+void Pokemon::initStateList()
+{
+   for(auto& i : this->stateList)
+   {
+       i = false;
+   }
 }
 
 //Getter
@@ -126,15 +134,6 @@ string Pokemon::getName()
 vector<Attribute> Pokemon::getTypes()
 {
     return this->types;
-}
-/**
- * Intent: Get Pokemon State
- * Pre: state
- * Pos: return Pokemon State
- */
-State Pokemon::getState()
-{
-    return this->state;
 }
 /**
  * Intent: Get Pokemon Hp
@@ -201,14 +200,24 @@ double Pokemon::getSpeed()
     return this->speed;
 }
 //Setter
-/**
- * Intent: Set Pokemon State
- * Pre: pokemonState
- * Pos: Set Pokemon State
- */
-void Pokemon::setState(State state)
+//set Pokemon poisoned
+void Pokemon::bePoisoned()
 {
-    this->state = state;
+    this->stateList[State::POISON_STATE] = true;
+    cout<<"<"<<this->name<<"> was poisoned!"<<endl;
+}
+//set Pokemon paralysis
+void Pokemon::beParalysis()
+{
+    this->stateList[State::PARALYSIS_STATE] = true;
+     cout<<"<"<<this->name<<"> is paralyzed, so it may be unable to move!"<<endl;
+    
+}
+//set Pokemon burned
+void Pokemon::beBurned()
+{
+    this->stateList[State::BURN_STATE] = true;
+    cout<<"<"<<this->name<<"> was burned!"<<endl;
 }
 /**
  * Intent: Pokemon receive damage so reduce Pokemon Hp
@@ -221,7 +230,7 @@ void Pokemon::receiveDamage(double damage)
     if(this->hp < 0)
     {
         this->hp = 0;
-        this->state = FAINTING;
+        this->stateList[State::FAINTING_STATE] = true;
     }
 }
 /**
@@ -246,8 +255,94 @@ void Pokemon::reduceSpeed(double speed)
 void Pokemon::restoreHP(double amount)
 {
     hp += amount;
-    if (HP > maxHP)
+    if (hp > maxHP)
     {
         hp = maxHP;
     }
 }
+/**
+ * Intent:check Pokemon Status Poisoned
+ * Pre:
+ * Pos:return POISON_STATE
+*/
+bool Pokemon::isPoisoned()
+{
+    return stateList[State::POISON_STATE];
+}
+/**
+ * Intent:check Pokemon Status Paralysis
+ * Pre:
+ * Pos:return PARALYSIS_STATE
+*/
+bool Pokemon::isParalysis()
+{
+    return stateList[State::PARALYSIS_STATE];
+}
+
+/**
+ * Intent:check Pokemon Status burn
+ * Pre:
+ * Pos:return BURN_STATE
+*/
+bool Pokemon::isBurned()
+{
+    return stateList[State::BURN_STATE];
+}
+
+/**
+ * Intent:poison attack
+ * Pre:target pokemon
+ * Pos:target be poison
+*/
+void Pokemon::poisonAttack(Pokemon& target)
+{
+    target.bePoisoned();
+}
+/**
+ * Intent:paralysis attack
+ * Pre:target pokemon
+ * Pos:target be paralysis
+*/
+void Pokemon::paralysisAttack(Pokemon& target)
+{   
+    target.beParalysis();
+}
+/**
+ * Intent:burn attack
+ * Pre:target pokemon
+ * Pos:target be burned
+*/
+void Pokemon::burnAttack(Pokemon& target)
+{
+    target.beBurned();
+}
+/**
+ * Intent:effect Damage
+ * Pre:
+ * Pos:return hp/16
+*/
+double Pokemon::effectDamage()
+{
+    return  getMaxHP() * (1/16);
+}
+
+/**
+ * Intent:apply Burn or Poison
+ * Pre:
+ * Pos:recieve Damage by burn or poison
+*/
+void Pokemon::applyNegativeEffect()
+{
+    if(isPoisoned())
+    {
+        cout<<"<"<<this->name<<"> is hurt by its poisoning!"<<endl;
+        receiveDamage(effectDamage());
+    }
+    else if(isBurned())
+    {
+        cout<<"<"<<this->name<<"> is hurt by its burn!"<<endl;
+        receiveDamage(effectDamage());
+    }
+}
+
+
