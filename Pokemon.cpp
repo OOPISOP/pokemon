@@ -2,8 +2,8 @@
  * File: Pokemon.h
  * Author: B11115016
  * Create Date: 2023/05/29
- * Editor: B11115016,B11115033
- * Update Date: 2023/05/29
+ * Editor: B11115016, B11115033, B11115013
+ * Update Date: 2023/06/01
  * Description: Implement Pokemon
 ***********************************************************************/
 #include "Pokemon.h"
@@ -235,5 +235,19 @@ void Pokemon::reduceSpeed(double speed)
     if(speed < 0)
     {
         this->speed = 0;
+    }
+}
+
+/**
+ * Intent: Pokemon received potion so HP is healed
+ * Pre: Pokemon HP
+ * Pos: increase the Pokemon HP
+ */
+void Pokemon::restoreHP(double amount)
+{
+    hp += amount;
+    if (HP > maxHP)
+    {
+        hp = maxHP;
     }
 }
