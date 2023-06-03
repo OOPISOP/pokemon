@@ -7,56 +7,21 @@
  * Description: Define Pokemon
 ***********************************************************************/
 #pragma once
-
-#include "DataFormat.h"
-#include "StatusEffect.h"
 #include "Attack.h"
-#include "Poison.h"
-#include "Burn.h"
-#include "Potion.h"
+#include "EnumList.h"
 #include <string>
 #include <vector>
+#include <iostream>
 using namespace std;
 //record Pokemon basic data、status、attack、add hp、reduce hp、Potion、Paralysis...
 
-//Pokemon State,Normal,Poison,Burn,Paralysis,Fainting
-enum State
-{
-    NORMAL,
-    POISON,
-    BURN,
-    PARALYSIS,
-    FAINTING
-};
-//attribute
-enum Attribute
-{
-    NORMAL,
-    FIRE,
-    WATER,
-    ELECTRIC,
-    GRASS,
-    ICE,
-    FIGHTING,
-    POISON,
-    GROUND,
-    FLYING,
-    PSYCHIC,
-    BUG,
-    ROCK,
-    GHOST,
-    DRAGON,
-    DARK,
-    STEEL,
-    FAIRY
-};
 
 Attribute stringToType(string type);
 
 class Pokemon
 {
 private:
-    State state;//Pokemon State
+    bool stateList[5];//Pokemon State List 
     string name;//Pokemon Name
     vector<Attribute> types;//Pokemon Type
     vector<Attack> attacks;//Pokemon Attack
@@ -69,12 +34,14 @@ private:
     double speed;//Pokemon Speed
 public:
     //Pokemon Constructor
-    Pokemon(State state, string name, vector<Attribute> types, double maxHP, double atk, double def, double spAtk, double spDef, double speed);
+    Pokemon(string name, vector<Attribute> types, double maxHP, double atk, double def, double spAtk, double spDef, double speed);
     //Pokemon Destructor
     ~Pokemon();
+
+    //Init State
+    void initStateList();
+
     //Getter
-    //get Pokemon State
-    State getState();
     //get Pokemon Name
     string getName();
     //get Pokemon Types
@@ -94,12 +61,37 @@ public:
     //get Pokemon Speed
     double getSpeed();
     //Setter
-    //set Pokemon State
-    void setState(State state);
+    //set Pokemon poisoned
+    void bePoisoned();
+    //set Pokemon paralysis
+    void beParalysis();
+    //set Pokemon burned
+    void beBurned();
+    
     //Pokemon receive damage
     void receiveDamage(double damage);
     //Pokemon reduce speed
     void reduceSpeed(double speed);
     //restoring Pokemon HP
     void restoreHP(double amount);
+
+    //check Pokemon Status Poisoned
+    bool isPoisoned();
+    //check Pokemon Status Paralysis
+    bool isParalysis();
+    //check Pokemon Status Burned
+    bool isBurned();
+
+    //poison attack 
+    void poisonAttack(Pokemon& target);
+    //paralysis attack 
+    void paralysisAttack(Pokemon& target);
+    //burn attack 
+    void burnAttack(Pokemon& target);
+
+    double effectDamage();
+
+    //apply burn or poison effect
+    void applyNegativeEffect();
+
 };

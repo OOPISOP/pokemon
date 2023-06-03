@@ -7,8 +7,7 @@
  * Description: This C++ program is to Test Pokemons' battle ability.
 ***********************************************************************/
 #pragma once
-
-#include "Pokemon.h"
+#include "EnumList.h"
 #include "string"
 using namespace std;
 

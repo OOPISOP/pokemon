@@ -17,6 +17,7 @@ Game::~Game()
 {
 
 }
+
 /**
  * Intent: Execute command
  * Pre:
@@ -31,11 +32,16 @@ bool Game::executeCommand(string command)
     }
     stringstream commandStream(command);
     string action;
+    commandStream >> action;
     try
     {
         if(action == "PokemonData")
         {
-
+            string fileName;
+            commandStream >> fileName;//get fileName
+            DataFormat dataFormat;
+            dataFormat.loadPokemonData(fileName);
+            pokemons = dataFormat.pokemons;
         }
         else if(action == "MoveData")
         {
@@ -66,6 +72,10 @@ bool Game::executeCommand(string command)
 
         }
         else if(action == "Run")
+        {
+
+        }
+        else if(action == "Test")
         {
 
         }

@@ -9,8 +9,7 @@
 #pragma once
 
 #include "Pokemon.h"
-#include "Attack.h"
-#include "Game.h"
+#include "Player.h"
 #include <vector>
 #include <string>
 #include <fstream>
@@ -22,6 +21,8 @@ using namespace std;
 class DataFormat
 {
 public:
+    vector<Pokemon> pokemons;
+
     //DataFormat Constructor
     DataFormat();
     //DataFormat Destructor
@@ -31,7 +32,7 @@ public:
      * Pre:Pokemon data file name
      * Pos:return pokemons
      */
-    vector<Pokemon>& loadPokemonData(string fileName);
+    void loadPokemonData(string fileName);
     /**
      * Intent:Load Game data from file 
      * Pre:Game data file name

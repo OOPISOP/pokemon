@@ -24,27 +24,24 @@ DataFormat::~DataFormat()
  * Pre:Pokemon data file name
  * Pos:return pokemons
  */
-vector<Pokemon>& DataFormat::loadPokemonData(string fileName)
+void DataFormat::loadPokemonData(string fileName)
 {
-    vector<Pokemon> pokemons;
     ifstream pokemonData(fileName);
     //Error Proof
-    if(!pokemonData.is_open())
-    {
-        return ;
-    }
+     if(!pokemonData.is_open())
+     {
+        cout<<fileName<<" Can't Open"<<endl;
+        return;
+     }
     string line;
     while(getline(pokemonData,line))
-    {   
+    {
         vector<string>lines;//data lines
-        lines.push_back(line);
-        for(int i=0;getline(pokemonData,line),i<2;i++)//get firstline to thirdline
-        {
-            lines.push_back(line);
-        }
-        string firstLine = lines[0];//record first line
-        string secondLine = lines[1];//record second line
-        string thirdLine = lines[2];//record third line
+        string firstLine = line;//record first line
+        getline(pokemonData,line);
+        string secondLine = line;
+        getline(pokemonData,line);
+        string thirdLine = line;
         string part;
         vector<string> parts;
         int typeN;//type N
@@ -60,12 +57,13 @@ vector<Pokemon>& DataFormat::loadPokemonData(string fileName)
         {
             pokemonTypes.push_back(stringToType(parts[i]));
         }
+        parts.clear();
         while(getline(third,part,' '))//get all parts of second line
         {
             parts.push_back(part);
         }
         //Create Pokemon
-        Pokemon pokemon(State::NORMAL,firstLine,pokemonTypes,stod(parts[0]),stod(parts[1]),stod(parts[2]),stod(parts[3]),stod(parts[4]),stod(parts[5]));
+        Pokemon pokemon(firstLine,pokemonTypes,stod(parts[0]),stod(parts[1]),stod(parts[2]),stod(parts[3]),stod(parts[4]),stod(parts[5]));
         //Add Pokemon
         pokemons.push_back(pokemon);
     }

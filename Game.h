@@ -9,6 +9,8 @@
 #pragma once
 
 #include "Player.h"
+#include "EnumList.h"
+#include "DataFormat.h"
 #include <string>
 #include <sstream>
 #include <vector>
@@ -19,6 +21,7 @@ class Game
 {
 private:
     vector<Player> players;
+    vector<Pokemon> pokemons;
 public:
     //Game Constructor
     Game();
