@@ -3,14 +3,13 @@
  * Author: B11115016
  * Create Date: 2023/05/29
  * Editor: B11115016,B11115033
- * Update Date: 2023/05/29
+ * Update Date: 2023/06/
  * Description: This C++ program is Pokemon Game Manager
 ***********************************************************************/
 #pragma once
 
 #include "Player.h"
 #include "EnumList.h"
-#include "DataFormat.h"
 #include <string>
 #include <sstream>
 #include <vector>
@@ -19,10 +18,13 @@ using namespace std;
 
 class Game
 {
-private:
+public:
+    // Variables.
+    bool currentTurn;
     vector<Player> players;
     vector<Pokemon> pokemons;
-public:
+
+
     //Game Constructor
     Game();
     //Game Destructor
@@ -32,5 +34,5 @@ public:
      * Pre:
      * Pos:return true or false 
      */
-    bool executeCommand(string command);  
+    void executeCommand(string command);
 };

@@ -15,7 +15,8 @@ SOURCES += \
     Pokemon.cpp\
     Potion.cpp\
     Player.cpp\
-    DataFormat.cpp
+    DataFormat.cpp \
+    move.cpp
     mainwindow.cpp
 
 HEADERS += \
@@ -27,6 +28,7 @@ HEADERS += \
     Player.h\
     DataFormat.h\
     EnumList.h\
+    move.h
 
 FORMS += \
 
