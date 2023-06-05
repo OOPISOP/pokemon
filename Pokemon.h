@@ -7,17 +7,19 @@
  * Description: Define Pokemon
 ***********************************************************************/
 #pragma once
+
 #include "Attack.h"
 #include "EnumList.h"
+#include "Move.h"
 #include <string>
 #include <vector>
 #include <iostream>
-using namespace std;
-//record Pokemon basic data、status、attack、add hp、reduce hp、Potion、Paralysis...
 
+using namespace std;
 
 Attribute stringToType(string type);
 
+//record Pokemon basic data、status、attack、add hp、reduce hp、Potion、Paralysis...
 class Pokemon
 {
 private:
@@ -32,11 +34,18 @@ private:
     double spAtk;//Pokemon Special Attack
     double spDef;//Pokemon Special Defense
     double speed;//Pokemon Speed
+
 public:
+    vector<Move> moves;//Pokemon Move
+
     //Pokemon Constructor
+    Pokemon();
     Pokemon(string name, vector<Attribute> types, double maxHP, double atk, double def, double spAtk, double spDef, double speed);
     //Pokemon Destructor
     ~Pokemon();
+
+    // Assign operator.
+    Pokemon& operator=(Pokemon &aPokemon);
 
     //Init State
     void initStateList();

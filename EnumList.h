@@ -1,13 +1,4 @@
-/***********************************************************************
- * File: EnumList.h
- * Author: B11115016
- * Create Date: 2023/06/04
- * Editor: B11115016,
- * Update Date: 2023/06/
- * Description: This C++ program is to Test Pokemons' battle ability.
-***********************************************************************/
 #pragma once
-
 //Pokemon State,Normal,Poison,Burn,Paralysis,Fainting
 enum State
 {
@@ -16,7 +7,6 @@ enum State
     PARALYSIS_STATE,
     FAINTING_STATE
 };
-
 //attribute
 enum Attribute
 {
@@ -38,6 +28,9 @@ enum Attribute
     DARK,
     STEEL,
     FAIRY
+<<<<<<< Updated upstream
+};
+=======
 };
 
 // Turn management.
@@ -46,3 +39,12 @@ enum Turn
     PLAYER_TURN,
     OPPONENT_TURN
 };
+
+// Move's type.
+enum MoveType
+{
+    PHYSICAL,
+    SPECIAL,
+    STATUS
+};
+>>>>>>> Stashed changes

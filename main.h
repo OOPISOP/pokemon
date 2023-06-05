@@ -8,19 +8,18 @@
 ***********************************************************************/
 #pragma once
 
-// Standard library
+#include "DataFormat.h"
 #include <iostream>
 
-// Custom library
-#include "Game.h"
-
 using namespace std;
+
 /**
  * Intent: Run CLI
  * Pre: Start Program
  * Post: End Program
 */
 void runCommandLine();
+
 /**
  * Intent: Run GUI
  * Pre: Start Program

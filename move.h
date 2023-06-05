@@ -8,13 +8,22 @@
 ***********************************************************************/
 #pragma once
 
+#include "EnumList.h"
+#include <string>
+
 using namespace std;
 
 class Move
 {
 public:
     string name;
-    string
+    int attribute;
+    int type;
+    int power;
+    int accuracy;
+    int pp;
+    bool isCon;
+    int con;
 
-    Move();
+    Move(string name, int attribute, int type, int power, int accuracy, int pp, bool isCon, int con);
 };

@@ -1,5 +1,5 @@
 /***********************************************************************
- * File: Pokemon.h
+ * File: Pokemon.cpp
  * Author: B11115016
  * Create Date: 2023/05/29
  * Editor: B11115016, B11115033, B11115013
@@ -89,6 +89,9 @@ Attribute stringToType(string type)
 }
 
 //Pokemon Constructor
+Pokemon::Pokemon()
+{
+}
 Pokemon::Pokemon(string name, vector<Attribute> types, double maxHP, double atk, double def, double spAtk, double spDef, double speed)
 {   
     initStateList();
@@ -114,6 +117,19 @@ void Pokemon::initStateList()
    {
        i = false;
    }
+}
+
+// Assign operator.
+Pokemon& Pokemon::operator=(Pokemon &aPokemon)
+{
+   this->name = aPokemon.name;
+   this->types = aPokemon.types;
+   this->maxHP = aPokemon.maxHP;
+   this->atk = aPokemon.atk;
+   this->def = aPokemon.def;
+   this->spAtk = aPokemon.spAtk;
+   this->spDef = aPokemon.spDef;
+   this->speed = aPokemon.speed;
 }
 
 //Getter

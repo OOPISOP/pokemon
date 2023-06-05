@@ -15,8 +15,12 @@ SOURCES += \
     Pokemon.cpp\
     Potion.cpp\
     Player.cpp\
+<<<<<<< Updated upstream
+    DataFormat.cpp
+=======
     DataFormat.cpp \
-    move.cpp
+    Move.cpp
+>>>>>>> Stashed changes
     mainwindow.cpp
 
 HEADERS += \
@@ -28,7 +32,10 @@ HEADERS += \
     Player.h\
     DataFormat.h\
     EnumList.h\
-    move.h
+<<<<<<< Updated upstream
+=======
+    Move.h
+>>>>>>> Stashed changes
 
 FORMS += \
 
