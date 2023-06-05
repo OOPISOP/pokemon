@@ -7,6 +7,10 @@
  * Description: This C++ program is to Test Pokemons' battle ability.
 ***********************************************************************/
 #include "main.h"
+#include <QApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+
 
 /**
  * Intent: Run CLI
@@ -57,13 +61,31 @@ void runCommandLine()
  * Pre: Start Program
  * Post: End Program
 */
-int runGUI()
+int runGUI(int argc, char** argv)
 {
-	return 0;
+    QGuiApplication app(argc, argv);
+
+    QQmlApplicationEngine engine;
+
+    // 註冊C++ class
+    qmlRegisterType<Game>("com.game", 1, 0, "Game");
+
+    // Load QML
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+
+    return app.exec();
 }
 
 int main(int argc, char** argv)
 {
-    runCommandLine();
+    if(argc == 1)
+    {
+        return runGUI(argc,argv);
+    }
+    else if (string(argv[1]) == string("CommandInput") && argc == 2)
+    {
+        //執行指令輸入模式
+        runCommandLine();
+    }
 	return 0;
 }
