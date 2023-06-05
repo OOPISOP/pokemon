@@ -28,9 +28,6 @@ enum Attribute
     DARK,
     STEEL,
     FAIRY
-<<<<<<< Updated upstream
-};
-=======
 };
 
 // Turn management.
@@ -47,4 +44,3 @@ enum MoveType
     SPECIAL,
     STATUS
 };
->>>>>>> Stashed changes

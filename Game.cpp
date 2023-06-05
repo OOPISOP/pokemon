@@ -10,15 +10,11 @@
 //Game Constructor
 Game::Game()
 {
-<<<<<<< Updated upstream
-
-=======
     isTestMode = false;
     Player player;
     Player opponent;
     players.push_back(player);
     players.push_back(opponent);
->>>>>>> Stashed changes
 }
 //Game Destructor
 Game::~Game()
@@ -38,30 +34,6 @@ bool Game::executeCommand(string command)
     {
         return false;
     }
-<<<<<<< Updated upstream
-    stringstream commandStream(command);
-    string action;
-    commandStream >> action;
-    try
-    {
-        if(action == "PokemonData")
-        {
-            string fileName;
-            commandStream >> fileName;//get fileName
-            DataFormat dataFormat;
-            dataFormat.loadPokemonData(fileName);
-            pokemons = dataFormat.pokemons;
-        }
-        else if(action == "MoveData")
-        {
-
-        }
-        else if(action == "GameData")
-        {
-
-        }
-        else if(action == "Bag")
-=======
 
     currentTurn = (players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon].getSpeed() >
                         players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon].getSpeed()) ?
@@ -70,7 +42,6 @@ bool Game::executeCommand(string command)
     try
     {
         if(command == "Bag")
->>>>>>> Stashed changes
         {
 
         }

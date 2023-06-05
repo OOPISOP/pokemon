@@ -14,15 +14,6 @@
  * Post: End Program
 */
 void runCommandLine()
-<<<<<<< Updated upstream
-{	
-	Game game;
-	string commandLine;
-	while(getline(cin,commandLine))
-	{
-		game.executeCommand(commandLine);
-	}
-=======
 {
     // Variables.
     Game game;
@@ -60,7 +51,6 @@ void runCommandLine()
 //    }
 
     testCaseFile.close();
->>>>>>> Stashed changes
 }
 /**
  * Intent: Run GUI

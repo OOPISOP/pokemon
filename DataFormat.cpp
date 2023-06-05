@@ -13,11 +13,7 @@
  * Pre:Pokemon data file name
  * Pos:return pokemons
  */
-<<<<<<< Updated upstream
-void DataFormat::loadPokemonData(string fileName)
-=======
 void DataFormat::loadPokemonData(string fileName, Game *game)
->>>>>>> Stashed changes
 {
     ifstream pokemonData(fileName);
     //Error Proof
@@ -58,22 +54,6 @@ void DataFormat::loadPokemonData(string fileName, Game *game)
         //Create Pokemon
         Pokemon pokemon(firstLine,pokemonTypes,stod(parts[0]),stod(parts[1]),stod(parts[2]),stod(parts[3]),stod(parts[4]),stod(parts[5]));
         //Add Pokemon
-<<<<<<< Updated upstream
-        pokemons.push_back(pokemon);
-    }
-}
-/**
- * Intent:Load Game data from file 
- * Pre:Game data file name
- * Pos:return players
- */
-vector<Player>& DataFormat::loadGameData(string fileName)
-{   
-    vector<Player> players;
-    Player player;
-    players.push_back(player);
-    return players;
-=======
         game->pokemons.push_back(pokemon);
     }
 }
@@ -208,5 +188,4 @@ void DataFormat::loadGameData(string fileName, Game *game)
         // Skip to next line and read new Player.
         gameDataFile.ignore();
     }
->>>>>>> Stashed changes
 }
