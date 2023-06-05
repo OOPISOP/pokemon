@@ -28,4 +28,23 @@ enum Attribute
     DARK,
     STEEL,
     FAIRY
+<<<<<<< Updated upstream
 };
+=======
+};
+
+// Turn management.
+enum Turn
+{
+    PLAYER_TURN,
+    OPPONENT_TURN
+};
+
+// Move's type.
+enum MoveType
+{
+    PHYSICAL,
+    SPECIAL,
+    STATUS
+};
+>>>>>>> Stashed changes

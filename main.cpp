@@ -7,12 +7,14 @@
  * Description: This C++ program is to Test Pokemons' battle ability.
 ***********************************************************************/
 #include "main.h"
+
 /**
  * Intent: Run CLI
  * Pre: Start Program
  * Post: End Program
 */
 void runCommandLine()
+<<<<<<< Updated upstream
 {	
 	Game game;
 	string commandLine;
@@ -20,6 +22,45 @@ void runCommandLine()
 	{
 		game.executeCommand(commandLine);
 	}
+=======
+{
+    // Variables.
+    Game game;
+    DataFormat dataFormat;
+    string fileName;
+    fstream testCaseFile;
+    string commandLine;
+
+    // Initialise testcase.
+    std::cin >> fileName;
+    testCaseFile.open(fileName);
+    //Error Proof
+    if(!testCaseFile.is_open())
+    {
+        cout<< "The input testcase: \"" << fileName << "\" cannot be opened." << endl;
+        return;
+    }
+
+    // Initialise pokemon library.
+    testCaseFile >> fileName;
+    dataFormat.loadPokemonData(fileName, &game);
+
+    // Initialise move library.
+    testCaseFile >> fileName;
+    dataFormat.loadMoveData(fileName, &game);
+
+    // Initialise game data.
+    testCaseFile >> fileName;
+    dataFormat.loadGameData(fileName, &game);
+
+//    // Read commands.
+//    while(getline(testCaseFile,commandLine))
+//    {
+//        game.executeCommand(commandLine);
+//    }
+
+    testCaseFile.close();
+>>>>>>> Stashed changes
 }
 /**
  * Intent: Run GUI

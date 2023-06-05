@@ -1,5 +1,5 @@
  /***********************************************************************
-  * File: DataFormat.h
+  * File: Potion.cpp
   * Author: B11115016
   * Create Date: 2023/05/29
   * Editor: B11115016, B1115013
@@ -8,6 +8,7 @@
  ***********************************************************************/
  #pragma once
  #include "Potion.h"
+
  using namespace std;
 
  //Potion constructor
