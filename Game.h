@@ -7,26 +7,29 @@
  * Description: This C++ program is Pokemon Game Manager
 ***********************************************************************/
 #pragma once
-
 #include "Player.h"
 #include "EnumList.h"
 #include "Move.h"
+#include <QObject>
 #include <string>
 #include <vector>
 #include <sstream>
 #include <iostream>
-
+#include<QObject>
+#include<QApplication>
+#include<QString>
+#include<QDebug>
 using namespace std;
 
-class Game
+class Game : public QObject
 {
+ Q_OBJECT
 public:
     bool currentTurn;
     vector<Player> players;
     vector<Pokemon> pokemons;
     vector<Move> moves;//Pokemon Move
     bool isTestMode;
-
     //Game Constructor
     Game();
     //Game Destructor
@@ -38,4 +41,12 @@ public:
      * Pos:return true or false 
      */
     bool executeCommand(string command);
+
+    /**
+     * Intent: Execute command for QString
+     * Pre:
+     * Pos:return true or false
+     */
+    Q_INVOKABLE bool executeCommand(QString command);
+
 };

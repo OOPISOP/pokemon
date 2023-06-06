@@ -7,7 +7,10 @@
  * Description: This C++ program is Pokemon Game Manager
 ***********************************************************************/
 #include "Game.h"
+
+
 //Game Constructor
+
 Game::Game()
 {
     isTestMode = false;
@@ -20,6 +23,20 @@ Game::Game()
 Game::~Game()
 {
 
+}
+/**
+ * Intent: Execute command for QString
+ * Pre:
+ * Pos:return true or false
+ */
+bool Game::executeCommand(QString command)
+{
+    string stdString = command.toStdString();
+    if(executeCommand(stdString))
+    {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -35,15 +52,14 @@ bool Game::executeCommand(string command)
         return false;
     }
 
-    currentTurn = (players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon].getSpeed() >
-                        players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon].getSpeed()) ?
-                           PLAYER_TURN : OPPONENT_TURN;
-
+//    currentTurn = (players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon].getSpeed() >
+//                        players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon].getSpeed()) ?
+//                           PLAYER_TURN : OPPONENT_TURN;
     try
     {
         if(command == "Bag")
         {
-
+            cout<<"bag"<<endl;
         }
         else if(command == "Pokemon")
         {
