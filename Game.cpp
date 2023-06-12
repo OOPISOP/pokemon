@@ -7,23 +7,36 @@
  * Description: This C++ program is Pokemon Game Manager
 ***********************************************************************/
 #include "Game.h"
+
+
 //Game Constructor
+
 Game::Game()
 {
-<<<<<<< Updated upstream
-
-=======
     isTestMode = false;
     Player player;
     Player opponent;
     players.push_back(player);
     players.push_back(opponent);
->>>>>>> Stashed changes
 }
 //Game Destructor
 Game::~Game()
 {
 
+}
+/**
+ * Intent: Execute command for QString
+ * Pre:
+ * Pos:return true or false
+ */
+bool Game::executeCommand(QString command)
+{
+    string stdString = command.toStdString();
+    if(executeCommand(stdString))
+    {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -38,41 +51,15 @@ bool Game::executeCommand(string command)
     {
         return false;
     }
-<<<<<<< Updated upstream
-    stringstream commandStream(command);
-    string action;
-    commandStream >> action;
-    try
-    {
-        if(action == "PokemonData")
-        {
-            string fileName;
-            commandStream >> fileName;//get fileName
-            DataFormat dataFormat;
-            dataFormat.loadPokemonData(fileName);
-            pokemons = dataFormat.pokemons;
-        }
-        else if(action == "MoveData")
-        {
 
-        }
-        else if(action == "GameData")
-        {
-
-        }
-        else if(action == "Bag")
-=======
-
-    currentTurn = (players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon].getSpeed() >
-                        players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon].getSpeed()) ?
-                           PLAYER_TURN : OPPONENT_TURN;
-
+//    currentTurn = (players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon].getSpeed() >
+//                        players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon].getSpeed()) ?
+//                           PLAYER_TURN : OPPONENT_TURN;
     try
     {
         if(command == "Bag")
->>>>>>> Stashed changes
         {
-
+            cout<<"bag"<<endl;
         }
         else if(command == "Pokemon")
         {

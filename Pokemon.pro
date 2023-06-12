@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui quick quickcontrols2 multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,12 +15,8 @@ SOURCES += \
     Pokemon.cpp\
     Potion.cpp\
     Player.cpp\
-<<<<<<< Updated upstream
-    DataFormat.cpp
-=======
     DataFormat.cpp \
     Move.cpp
->>>>>>> Stashed changes
     mainwindow.cpp
 
 HEADERS += \
@@ -32,10 +28,7 @@ HEADERS += \
     Player.h\
     DataFormat.h\
     EnumList.h\
-<<<<<<< Updated upstream
-=======
     Move.h
->>>>>>> Stashed changes
 
 FORMS += \
 
@@ -44,7 +37,6 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \
-
 RESOURCES += \
+    qrc.qrc
 

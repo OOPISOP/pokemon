@@ -8,13 +8,7 @@
 ***********************************************************************/
 #pragma once
 
-<<<<<<< Updated upstream
-#include "Pokemon.h"
-#include "Player.h"
-#include <vector>
-=======
 #include "Game.h"
->>>>>>> Stashed changes
 #include <string>
 #include <vector>
 #include <fstream>
@@ -26,29 +20,11 @@ using namespace std;
 class DataFormat
 {
 public:
-<<<<<<< Updated upstream
-    vector<Pokemon> pokemons;
-
-    //DataFormat Constructor
-    DataFormat();
-    //DataFormat Destructor
-    ~DataFormat();
-=======
->>>>>>> Stashed changes
     /**
      * Intent:Load Pokemon data from file
      * Pre:Pokemon data file name
      * Pos:return pokemons
      */
-<<<<<<< Updated upstream
-    void loadPokemonData(string fileName);
-    /**
-     * Intent:Load Game data from file 
-     * Pre:Game data file name
-     * Pos:return players
-     */
-    vector<Player>& loadGameData(string fileName);
-=======
     void loadPokemonData(string fileName, Game *game);
 
     // Intent:  Load move data from file.
@@ -60,5 +36,4 @@ public:
     // Pre:     Game data file name.
     // Post:    Print failed if file cannot be opened.
     void loadGameData(string fileName, Game *game);
->>>>>>> Stashed changes
 };
