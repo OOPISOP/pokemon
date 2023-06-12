@@ -39,7 +39,6 @@ private:
 
 public:
     Attack();
-	double tableTypeEffectiveness[TYPESIZE][TYPESIZE];
     double getPower();
     double getAtk();
     double calculateDmg(string& moveNames);

@@ -27,25 +27,37 @@ void DataFormat::loadPokemonData(string fileName, Game *game)
         return;
      }
     string line;
-    while(getline(pokemonData,line))
+    while(getline(pokemonData,line)) // venusaur
     {
+        // reading inputs:
         vector<string>lines;//data lines
+
         string firstLine = line;//record first line
-        getline(pokemonData,line);
-        string secondLine = line;
-        getline(pokemonData,line);
-        string thirdLine = line;
+        
+        getline(pokemonData,line); // 2 grass poison
+        string secondLine = line;// record second line
+
+        getline(pokemonData, line); // 187 147 148 167 167 145
+        string thirdLine = line;// record third line
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        // stored:
+
         string part;
         vector<string> parts;
         int typeN;//type N
         vector<Attribute> pokemonTypes;
+
         stringstream second(secondLine);
         stringstream third(thirdLine);
+
         while(getline(second,part,' '))//get all parts of second line
         {
-            parts.push_back(part);
+            parts.push_back(part); // 2 grass poin
         }
-        typeN = parts.size();//get type N
+
+        typeN = parts.size();//get type N // 3
+
         for(int i=0;i<typeN;i++)//set type
         {
             pokemonTypes.push_back(stringToType(parts[i]));
@@ -53,7 +65,7 @@ void DataFormat::loadPokemonData(string fileName, Game *game)
         parts.clear();
         while(getline(third,part,' '))//get all parts of second line
         {
-            parts.push_back(part);
+            parts.push_back(part); // 
         }
         //Create Pokemon
         Pokemon pokemon(firstLine,pokemonTypes,stod(parts[0]),stod(parts[1]),stod(parts[2]),stod(parts[3]),stod(parts[4]),stod(parts[5]));
