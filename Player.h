@@ -18,9 +18,7 @@ using namespace std;
 class Player
 {
 private:
-    Pokemon pokemon;
 public:
     vector<Pokemon> pokemons;
     int currentPokemon;
-    Pokemon& getPokemon();
 };

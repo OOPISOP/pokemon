@@ -1,13 +1,4 @@
-/***********************************************************************
- * File: EnumList.h
- * Author: B11115033
- * Create Date: 2023/05/29
- * Editor: B11115033, B11115016
- * Update Date: 2023/06/
- * Description: This C++ program is to store enum values.
-***********************************************************************/
 #pragma once
-
 //Pokemon State,Normal,Poison,Burn,Paralysis,Fainting
 enum State
 {

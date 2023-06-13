@@ -3,7 +3,7 @@
  * Author: B11115016
  * Create Date: 2023/05/29
  * Editor: B11115016,B11115033
- * Update Date: 2023/06/
+ * Update Date: 2023/05/29
  * Description:  Load Pokemon data from file , Pokemon data , Move data , Game data , Test Case format
 ***********************************************************************/
 #include "DataFormat.h"
@@ -154,7 +154,7 @@ void DataFormat::loadGameData(string fileName, Game *game)
         aPlayer.currentPokemon = 0;
 
         int pokemonNumber;
-        gameDataFile >> pokemonNumber; // 3
+        gameDataFile >> pokemonNumber;
         gameDataFile.ignore();
 
         // Initialise Pokemon.
