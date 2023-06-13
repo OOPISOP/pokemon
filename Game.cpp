@@ -52,34 +52,12 @@ bool Game::executeCommand(QString command)
  */
 bool Game::executeCommand(string command)
 {
-    if(command == "Load TestCase")
+    if(command == "TestCase")
     {
-        try
-        {
-            QString filePath = QFileDialog::getOpenFileName(
-                nullptr,
-                "選擇文件",
-                QDir::homePath(),
-                "文本文件 (*.txt);;所有文件 (*)"
-                );
-
-            if (!filePath.isEmpty()) {
-                qDebug() << "選擇的文件路徑" << filePath;
-            } else {
-                qDebug() << "為選擇任何文件";
-            }
-            ifstream file(filePath.toStdString());
-            string line;
-            while(getline(file,line))
-            {
-                executeCommand(line);
-            }
-        }
-        catch (const int error_code)
-        {
-            cout<<error_code<<endl;
-        }
-
+        stringstream commandStream(command);
+        string fileName;
+        commandStream>>fileName;
+        loadTestCase(fileName);
         return true;
     }
     if(command.empty())
@@ -355,5 +333,39 @@ bool Game::useBag()
     else
     {
         cout << "No such " << potionInput << "in the bag." << endl;
+    }
+}
+
+bool Game::loadTestCase(string fileName)
+{
+    ifstream file(fileName);
+    string line;
+    while(getline(file,line))
+    {
+        executeCommand(line);
+    }
+}
+
+bool Game::loadTestCase()
+{
+    try
+    {
+        QString filePath = QFileDialog::getOpenFileName(
+            nullptr,
+            "選擇文件",
+            QDir::homePath(),
+            "文本文件 (*.txt);;所有文件 (*)"
+            );
+
+        if (!filePath.isEmpty()) {
+            qDebug() << "選擇的文件路徑" << filePath;
+        } else {
+            qDebug() << "為選擇任何文件";
+        }
+        loadTestCase(filePath.toStdString());
+    }
+    catch (const int error_code)
+    {
+        cout<<error_code<<endl;
     }
 }

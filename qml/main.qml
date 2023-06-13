@@ -28,7 +28,6 @@ ApplicationWindow
                 onClicked:
                 {
                     game.executeCommand("Bag");
-                    //console.log("Button clicked!")
                 }
             }
             Button
@@ -39,8 +38,7 @@ ApplicationWindow
                 text: "Load TestCase"
                 onClicked:
                 {
-                    game.executeCommand("Load TestCase");
-                    //console.log("Button clicked!")
+                    game.loadTestCase();
                 }
             }
 

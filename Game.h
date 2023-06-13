@@ -42,6 +42,8 @@ public:
      */
     bool executeCommand(string command);
     bool useBag();
+    bool loadTestCase();
+    bool loadTestCase(string fileName);
 
     /**
      * Intent: Execute command for QString
