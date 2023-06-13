@@ -20,10 +20,6 @@
 Game::Game()
 {
     isTestMode = false;
-    Player player;
-    Player opponent;
-    players.push_back(player);
-    players.push_back(opponent);
 }
 //Game Destructor
 Game::~Game()
@@ -82,14 +78,15 @@ bool Game::executeCommand(string command)
         data.loadGameData(command,this);
         return true;
     }
-
+        currentTurn = (players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon].getSpeed() >
+                            players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon].getSpeed()) ?
+                               PLAYER_TURN : OPPONENT_TURN;
     //Error Proof
     try
     {
         if(command == "Bag")
         {
             cout << "Please choose potion to used: Potion, Super Potion, Hyper Potion, Max Potion." << endl;
-
 
         }
         else if(command == "Pokemon")
@@ -102,11 +99,11 @@ bool Game::executeCommand(string command)
         }
         else if(command == "Check")
         {
-
+            check();
         }
         else if(command == "Status")
         {
-
+            status(currentTurn);
         }
         else if(command == "Run")
         {
@@ -152,7 +149,6 @@ bool Game::useBag()
             // go back to the main menu
             return false;
         }
-
         else
         {
             bool found = false;
@@ -181,7 +177,6 @@ bool Game::useBag()
             }
         }
     }
-
     else if (potionInput == "Super Potion")
     {
         cout << "Choose pokemon to used the potion : ";
@@ -201,7 +196,6 @@ bool Game::useBag()
             // go back to the main menu
             return false;
         }
-
         else
         {
             bool found = false;
@@ -300,7 +294,6 @@ bool Game::useBag()
             // go back to the main menu
             return false;
         }
-
         else
         {
             bool found = false;
@@ -319,7 +312,6 @@ bool Game::useBag()
                 {
                     cout << "Invalid Pokemon to heal" << endl;
                 }
-
                 else
                 {
                     // call the function to used the potion
@@ -329,13 +321,16 @@ bool Game::useBag()
             }
         }
     }
-
     else
     {
         cout << "No such " << potionInput << "in the bag." << endl;
     }
 }
-
+/**
+ * @brief Game::loadTestCase
+ * @param fileName
+ * @return
+ */
 bool Game::loadTestCase(string fileName)
 {
     ifstream file(fileName);
@@ -345,7 +340,10 @@ bool Game::loadTestCase(string fileName)
         executeCommand(line);
     }
 }
-
+/**
+ * @brief Game::loadTestCase
+ * @return
+ */
 bool Game::loadTestCase()
 {
     try
@@ -368,4 +366,48 @@ bool Game::loadTestCase()
     {
         cout<<error_code<<endl;
     }
+}
+
+/**
+ * @brief Game::check
+ */
+void Game::check()
+{
+    Pokemon* pokemonOne,*pokemonTwo;
+    if(players.size()<2||players[PLAYER_TURN].pokemons.size()==0||players[PLAYER_TURN].pokemons.size()==0)
+    {
+        cout<<"error size"<<endl;
+        return;
+    }
+    pokemonOne = &players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon];
+    pokemonTwo = &players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon];
+    cout<<pokemonOne->getName()<<" "<<pokemonOne->getHp()<<" ";
+    for(const auto state: pokemonOne->getStateList())
+    {
+        if(state==true)
+        {
+            cout<<stateToString(state);
+        }
+    }
+    cout<<pokemonTwo->getName()<<" "<<pokemonTwo->getHp()<<" ";
+    for(const auto state: pokemonTwo->getStateList())
+    {
+        if(state==true)
+        {
+            cout<<stateToString(state);
+        }
+    }
+    cout<<endl;
+}
+/**
+ * @brief Game::status
+ */
+void Game::status(int currentTurn)
+{
+    Pokemon* pokemon = &players[currentTurn].pokemons[players[currentTurn].currentPokemon];
+    for(const auto& move : pokemon->getMoves())
+    {
+        cout<<move.getName()<<" "<<move.getPP()<<" ";
+    }
+    cout<<endl;
 }

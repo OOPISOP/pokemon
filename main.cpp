@@ -52,8 +52,8 @@ int main(int argc, char* argv[])
 
     if(argc == 1)
     {
-
-       return runGUI(argc,argv);
+        runCommandLine();
+       //return runGUI(argc,argv);
     }
     else if (string(argv[1]) == string("CommandInput") && argc == 2)
     {

@@ -88,6 +88,26 @@ Attribute stringToType(string type)
     }
 }
 
+string stateToString(int state)
+{
+    if(state==POISON_STATE)
+    {
+        return "PSN";
+    }
+    else if(state == BURN_STATE)
+    {
+        return "BRN";
+    }
+    else if(state == PARALYSIS_STATE)
+    {
+        return "PSN";
+    }
+    else if(state == FAINTING_STATE)
+    {
+        return "FAN";
+    }
+}
+
 //Pokemon Constructor
 Pokemon::Pokemon()
 {
@@ -104,6 +124,7 @@ Pokemon::Pokemon(string name, vector<Attribute> types, double maxHP, double atk,
     this->spAtk = spAtk;
     this->spDef = spDef;
     this->speed = speed;
+    this->stateList = vector<bool>(5,false);
 }
 //Pokemon Destructor
 Pokemon::~Pokemon()
@@ -113,10 +134,10 @@ Pokemon::~Pokemon()
 //Init State
 void Pokemon::initStateList()
 {
-   for(auto& i : this->stateList)
-   {
-       i = false;
-   }
+    for(int i=0;i<stateList.size();i++)
+    {
+        this->stateList[i] = false;
+    }
 }
 
 // Assign operator.
@@ -215,6 +236,12 @@ double Pokemon::getSpeed()const
 {
     return this->speed;
 }
+
+vector<bool> Pokemon::getStateList() const
+{
+    return stateList;
+}
+
 //Setter
 //set Pokemon poisoned
 void Pokemon::bePoisoned()
@@ -370,7 +397,7 @@ void Pokemon::applyNegativeEffect()
  * @param target
  * @param moveIndex
  */
-bool Pokemon::userMove(Pokemon& target,int moveIndex)
+bool Pokemon::useMove(Pokemon& target,int moveIndex)
 {
     if(moves[moveIndex].getPP() <= 0)return false;
     if(moves[moveIndex].getCon() > 0)
@@ -396,4 +423,12 @@ bool Pokemon::userMove(Pokemon& target,int moveIndex)
     return true;
 }
 
+/**
+ * @brief Pokemon::getMoves
+ * @return moves
+ */
+vector<Move> Pokemon::getMoves()const
+{
+    return this->moves;
+}
 

@@ -17,12 +17,13 @@
 using namespace std;
 
 Attribute stringToType(string type);
+string stateToString(int state);
 
 //record Pokemon basic data、status、attack、add hp、reduce hp、Potion、Paralysis...
 class Pokemon
 {
 private:
-    bool stateList[5];//Pokemon State List 
+    vector<bool> stateList;//Pokemon State List
     string name;//Pokemon Name
     vector<Attribute> types;//Pokemon Type
     vector<Move> moves;//Pokemon Attack
@@ -67,6 +68,8 @@ public:
     double getSpDef()const;
     //get Pokemon Speed
     double getSpeed()const;
+    vector<Move> getMoves()const;
+    vector<bool> getStateList()const;
     //Setter
     //set Pokemon poisoned
     void bePoisoned();
@@ -104,6 +107,6 @@ public:
     void applyNegativeEffect();
 
     //use move
-    bool userMove(Pokemon& target,int moveIndex);
+    bool useMove(Pokemon& target,int moveIndex);
 
 };

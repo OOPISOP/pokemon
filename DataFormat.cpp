@@ -7,7 +7,7 @@
  * Description:  Load Pokemon data from file , Pokemon data , Move data , Game data , Test Case format
 ***********************************************************************/
 #include "DataFormat.h"
-
+#include <sstream>
 
 /**
  * Intent:Load Pokemon data from file
@@ -75,52 +75,44 @@ bool DataFormat::loadMoveData(string fileName, Game *game)
         return false;
     }
     game->moves.clear();
-    string name;
-    while(moveDataFile >> name)
+    string name,line,attributeString,typeString;
+    int attribute,type,power,accuracy,pp,isCon;
+    int con = -1;
+    string buffer;
+    while(getline(moveDataFile,line))
     {
-        int attribute;
-        int type;
-        int power;
-        int accuracy;
-        int pp;
-        bool isCon;
-        int con = -1;
-        string buffer;
-
-        moveDataFile >> attribute;
-        moveDataFile >> type;
-        moveDataFile >> power;
-        moveDataFile >> accuracy;
-        moveDataFile >> pp;
-        moveDataFile >> buffer;
-
-        if (buffer != "\n")
+        stringstream commandLine(line);
+        if(!(commandLine>>name>>attributeString>>typeString>>power>>accuracy>>pp))
+        {
+            cout<<"command not complete"<<endl;
+            return false;
+        }
+        if(commandLine>>buffer)
         {
             isCon = true;
-            if (buffer == "PAR")
+            if(buffer == "PAR")
             {
                 con = PARALYSIS_STATE;
             }
-            else if (buffer == "BRN")
+            else if(buffer == "BRN")
             {
                 con = BURN_STATE;
             }
-            else if (buffer == "PSN")
+            else if(buffer == "PSN")
             {
                 con = POISON_STATE;
             }
+            else
+            {
+                isCon = false;
+                cout<<"unknown command"<<endl;
+            }
         }
-        else
-        {
-            isCon = false;
-        }
-
+        attribute = stringToType(attributeString);
+        type = stringToType(typeString);
         // Add a move to the library.
         Move aMove(name, attribute, type, power, accuracy, pp, isCon, con);
         game->moves.push_back(aMove);
-
-        // Next line.
-        moveDataFile.ignore();
     }
     return true;
 }
@@ -131,7 +123,6 @@ bool DataFormat::loadMoveData(string fileName, Game *game)
 bool DataFormat::loadGameData(string fileName, Game *game)
 {
     ifstream gameDataFile(fileName);
-
     //Error Proof
     if(!gameDataFile.is_open())
     {
@@ -144,20 +135,25 @@ bool DataFormat::loadGameData(string fileName, Game *game)
     {
         Player aPlayer;
         aPlayer.currentPokemon = 0;
-
         int pokemonNumber;
-        gameDataFile >> pokemonNumber;
+        if(!(gameDataFile >> pokemonNumber))
+        {
+            cout<<"No pokemon"<<endl;
+            return false;
+        }
         gameDataFile.ignore();
-
         // Initialise Pokemon.
         for (int j = 0; j < pokemonNumber; j++)
         {
-            Pokemon aPokemon;
+            Pokemon* aPokemon;
             string pokemonName;
             int moveNumber;
             string moveName;
-
-            gameDataFile >> pokemonName >> moveNumber;
+            if(!(gameDataFile >> pokemonName >> moveNumber))
+            {
+                cout<<"command no complete"<<endl;
+                return false;
+            }
             gameDataFile.ignore();
 
             // Find Pokemon in library.
@@ -165,7 +161,7 @@ bool DataFormat::loadGameData(string fileName, Game *game)
             {
                 if (game->pokemons[l].getName() == pokemonName)
                 {
-                    aPokemon = game->pokemons[l];
+                    aPokemon = &game->pokemons[l];
                     break;
                 }
             }
@@ -173,26 +169,27 @@ bool DataFormat::loadGameData(string fileName, Game *game)
             // Add Moves.
             for (int k = 0; k < moveNumber; k++)
             {
-                gameDataFile >> moveName;
-
+                if(!( gameDataFile >> moveName))
+                {
+                     cout<<"command no complete"<<endl;
+                    return false;
+                }
                 // Find Move in library.
                 for (int m = 0; m < game->moves.size(); m++)
                 {
                     if (game->moves[m].getName() == moveName)
                     {
                         moves.push_back(game->moves[m]);
+                        break;
                     }
                 }
             }
-            aPokemon.setMoves(moves);
+            aPokemon->setMoves(moves);
+            aPlayer.pokemons.push_back((*aPokemon));
             gameDataFile.ignore();
         }
-
         // Add Player.
         game->players.push_back(aPlayer);
-
-        // Skip to next line and read new Player.
-        gameDataFile.ignore();
     }
     return true;
 }

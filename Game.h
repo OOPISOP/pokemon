@@ -44,6 +44,8 @@ public:
     bool useBag();
     bool loadTestCase();
     bool loadTestCase(string fileName);
+    void check();
+    void status(int currentTurn);
 
     /**
      * Intent: Execute command for QString
