@@ -2,6 +2,7 @@
 //Pokemon State,Normal,Poison,Burn,Paralysis,Fainting
 enum State
 {
+    NORMAL_STATE,
     POISON_STATE,
     BURN_STATE,
     PARALYSIS_STATE,
