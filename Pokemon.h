@@ -68,7 +68,13 @@ public:
     //get Pokemon Special Defense
     double getSpDef();
     //get Pokemon Speed
+<<<<<<< Updated upstream
     double getSpeed();
+=======
+    double getSpeed()const;
+    // Get Pokemon Moves
+    vector<Move>& getMoves();
+>>>>>>> Stashed changes
     //Setter
     //set Pokemon poisoned
     void bePoisoned();

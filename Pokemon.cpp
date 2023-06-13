@@ -215,6 +215,11 @@ double Pokemon::getSpeed()
 {
     return this->speed;
 }
+vector<Move> &Pokemon::getMoves()
+{
+    return this->moves;
+}
+
 //Setter
 //set Pokemon poisoned
 void Pokemon::bePoisoned()

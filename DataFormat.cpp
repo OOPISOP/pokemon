@@ -173,9 +173,9 @@ void DataFormat::loadGameData(string fileName, Game *game)
                 // Find Move in library.
                 for (int m = 0; m < game->moves.size(); m++)
                 {
-                    if (game->moves[m].name == moveName)
+                    if (game->moves[m].getName() == moveName)
                     {
-                        aPokemon.moves.push_back(game->moves[m]);
+                        aPokemon.getMoves().push_back(game->moves[m]);
                     }
                 }
             }
