@@ -154,7 +154,7 @@ void DataFormat::loadGameData(string fileName, Game *game)
         aPlayer.currentPokemon = 0;
 
         int pokemonNumber;
-        gameDataFile >> pokemonNumber;
+        gameDataFile >> pokemonNumber; // 3
         gameDataFile.ignore();
 
         // Initialise Pokemon.

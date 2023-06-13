@@ -26,4 +26,7 @@ public:
     int con;
 
     Move(string name, int attribute, int type, int power, int accuracy, int pp, bool isCon, int con);
+    string getName();
+    string getPP();
+
 };

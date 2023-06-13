@@ -19,3 +19,13 @@ Move::Move(string name, int attribute, int type, int power, int accuracy, int pp
     this->isCon = isCon;
     this->con = con;
 }
+
+string Move::getName()
+{
+    return name;
+}
+
+string Move::getPP()
+{
+    return type;
+}
