@@ -8,8 +8,6 @@
 ***********************************************************************/
 #pragma once
 #include "EnumList.h"
-#include "move.h"
-#include "Game.h"
 #include <string>
 #include <vector>
 #define TYPESIZE 18;
@@ -66,7 +64,6 @@ private:
 
 public:
     Attack();
-	double tableTypeEffectiveness[TYPESIZE][TYPESIZE];
     double getPower();
     double getAtk();
     double calculateDmg(string& moveNames);

@@ -8,7 +8,6 @@
 ***********************************************************************/
 #pragma once
 
-#include "Attack.h"
 #include "EnumList.h"
 #include "Move.h"
 #include <string>
@@ -26,7 +25,7 @@ private:
     bool stateList[5];//Pokemon State List 
     string name;//Pokemon Name
     vector<Attribute> types;//Pokemon Type
-    vector<Attack> attacks;//Pokemon Attack
+    vector<Move> moves;//Pokemon Attack
     double maxHP;//Pokemon Max HP
     double hp;//Pokemon HP
     double atk;//Pokemon Attack
@@ -36,7 +35,6 @@ private:
     double speed;//Pokemon Speed
 
 public:
-    vector<Move> moves;//Pokemon Move
 
     //Pokemon Constructor
     Pokemon();
@@ -52,23 +50,23 @@ public:
 
     //Getter
     //get Pokemon Name
-    string getName();
+    string getName()const;
     //get Pokemon Types
-    vector<Attribute> getTypes();
+    vector<Attribute> getTypes()const;
     //get Pokemon HP
-    double getHp();
+    double getHp()const;
     //get Pokemon Max HP
-    double getMaxHP();
+    double getMaxHP()const;
     //get Pokemon Attack
-    double getAtk();
+    double getAtk()const;
     //get Pokemon Defense
-    double getDef();
+    double getDef()const;
     //get Pokemon Special Attack
-    double getSpAtk();
+    double getSpAtk()const;
     //get Pokemon Special Defense
-    double getSpDef();
+    double getSpDef()const;
     //get Pokemon Speed
-    double getSpeed();
+    double getSpeed()const;
     //Setter
     //set Pokemon poisoned
     void bePoisoned();
@@ -102,5 +100,8 @@ public:
 
     //apply burn or poison effect
     void applyNegativeEffect();
+
+    //use move
+    bool userMove(Pokemon& target,int moveIndex);
 
 };
