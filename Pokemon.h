@@ -67,6 +67,8 @@ public:
     double getSpDef()const;
     //get Pokemon Speed
     double getSpeed()const;
+    // Get Pokemon Moves
+    vector<Move>& getMoves();
     //Setter
     //set Pokemon poisoned
     void bePoisoned();
