@@ -7,6 +7,7 @@
  * Description: This C++ program is to Test Pokemons' battle ability.
 ***********************************************************************/
 #include "Move.h"
+#include "Pokemon.h"
 
 Move::Move(string name, int attribute, int type, int power, int accuracy, int pp, bool isCon, int con)
 {
@@ -19,13 +20,60 @@ Move::Move(string name, int attribute, int type, int power, int accuracy, int pp
     this->isCon = isCon;
     this->con = con;
 }
-
-string Move::getName()
+/**
+ * Intent:get move name
+ * Pos:return move name
+ */
+string Move::getName()const
 {
-    return name;
+    return this->name;
+}
+/**
+ * @brief Move::getCon
+ * @return this->con
+ */
+int Move::getCon()const
+{
+    return this->con;
+}
+/**
+ * @brief Move::getPP
+ * @return
+ */
+int Move::getPP()const
+{
+    return this->pp;
+}
+/**
+ * @brief Move::reducePP
+ */
+void Move::reducePP()
+{
+    this->pp--;
 }
 
-string Move::getPP()
+/**
+ * @brief Move::calcDamage
+ * @param user
+ * @param target
+ * @return move damage
+ */
+int Move::calcDamage(const Pokemon& user,const Pokemon& target)
 {
-    return type;
+    float stab = 1;
+    int typeTime = 1;
+    for(const auto& userType : user.getTypes())//if user type equal to move type stab = 1.5,otherwise = 1
+    {
+        if(type == userType)
+        {
+            stab = 1.5;
+            break;
+        }
+    }
+    for(const auto&  time : target.getTypes())//type times calc
+    {
+        typeTime *= TYPE_EFFECT[type][time];
+    }
+    int damage = (int)(0.44*power*(user.getAtk()/target.getDef())+2)*critical*stab*typeTime;//damage calc
+    return damage;
 }

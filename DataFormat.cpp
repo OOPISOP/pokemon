@@ -3,7 +3,7 @@
  * Author: B11115016
  * Create Date: 2023/05/29
  * Editor: B11115016,B11115033
- * Update Date: 2023/05/29
+ * Update Date: 2023/06/
  * Description:  Load Pokemon data from file , Pokemon data , Move data , Game data , Test Case format
 ***********************************************************************/
 #include "DataFormat.h"
@@ -185,9 +185,9 @@ void DataFormat::loadGameData(string fileName, Game *game)
                 // Find Move in library.
                 for (int m = 0; m < game->moves.size(); m++)
                 {
-                    if (game->moves[m].name == moveName)
+                    if (game->moves[m].getName() == moveName)
                     {
-                        aPokemon.moves.push_back(game->moves[m]);
+                        aPokemon.getMoves().push_back(game->moves[m]);
                     }
                 }
             }

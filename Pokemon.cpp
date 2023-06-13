@@ -138,7 +138,7 @@ Pokemon& Pokemon::operator=(Pokemon &aPokemon)
  * Pre: name
  * Pos: return Pokemon Name
  */
-string Pokemon::getName()
+string Pokemon::getName()const
 {
     return this->name;
 }
@@ -147,7 +147,7 @@ string Pokemon::getName()
  * Pre: types
  * Pos: return Pokemon Type
  */
-vector<Attribute> Pokemon::getTypes()
+vector<Attribute> Pokemon::getTypes()const
 {
     return this->types;
 }
@@ -156,7 +156,7 @@ vector<Attribute> Pokemon::getTypes()
  * Pre: hp
  * Pos: return Pokemon Hp
  */
-double Pokemon::getHp()
+double Pokemon::getHp()const
 {
     return this->hp;
 }
@@ -165,7 +165,7 @@ double Pokemon::getHp()
  * Pre: maxHP
  * Pos: return Pokemon Max HP
  */
-double Pokemon::getMaxHP()
+double Pokemon::getMaxHP()const
 {
     return this->maxHP;
 }
@@ -174,7 +174,7 @@ double Pokemon::getMaxHP()
  * Pre: atk
  * Pos: return Pokemon Atk
  */
-double Pokemon::getAtk()
+double Pokemon::getAtk()const
 {
     return this->atk;
 }
@@ -184,7 +184,7 @@ double Pokemon::getAtk()
  * Pre: def
  * Pos: return Pokemon Def
  */
-double Pokemon::getDef()
+double Pokemon::getDef()const
 {
     return this->def;
 }
@@ -193,7 +193,7 @@ double Pokemon::getDef()
  * Pre: spAtk
  * Pos: return Pokemon Special Attack
  */
-double Pokemon::getSpAtk()
+double Pokemon::getSpAtk()const
 {
     return this->spAtk;
 }
@@ -202,7 +202,7 @@ double Pokemon::getSpAtk()
  * Pre: spDef
  * Pos: return Pokemon Special Defense
  */
-double Pokemon::getSpDef()
+double Pokemon::getSpDef()const
 {
     return this->spDef;
 }
@@ -211,10 +211,15 @@ double Pokemon::getSpDef()
  * Pre: speed
  * Pos: return Pokemon Speed
  */
-double Pokemon::getSpeed()
+double Pokemon::getSpeed()const
 {
     return this->speed;
 }
+vector<Move> &Pokemon::getMoves()
+{
+    return this->moves;
+}
+
 //Setter
 //set Pokemon poisoned
 void Pokemon::bePoisoned()
@@ -359,6 +364,36 @@ void Pokemon::applyNegativeEffect()
         cout<<"<"<<this->name<<"> is hurt by its burn!"<<endl;
         receiveDamage(effectDamage());
     }
+}
+/**
+ * @brief Pokemon::userMove
+ * @param target
+ * @param moveIndex
+ */
+bool Pokemon::userMove(Pokemon& target,int moveIndex)
+{
+    if(moves[moveIndex].getPP() <= 0)return false;
+    if(moves[moveIndex].getCon() > 0)
+    {
+        int con = moves[moveIndex].getCon();
+        if(con == POISON_STATE)
+        {
+            target.bePoisoned();
+        }
+        else if(con == BURN_STATE)
+        {
+            target.beBurned();
+        }
+        else if(con == PARALYSIS_STATE)
+        {
+            target.beParalysis();
+        }
+    }
+    int damage = moves[moveIndex].calcDamage(*this,target);
+    target.receiveDamage(damage);
+    moves[moveIndex].reducePP();
+    cout<<"<"<<this->name<<"> used <"<<moves[moveIndex].getName()<<">!"<<endl;
+    return true;
 }
 
 
