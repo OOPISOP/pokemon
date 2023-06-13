@@ -41,6 +41,7 @@ public:
      * Pos:return true or false 
      */
     bool executeCommand(string command);
+    bool useBag();
 
     /**
      * Intent: Execute command for QString
@@ -50,3 +51,6 @@ public:
     Q_INVOKABLE bool executeCommand(QString command);
 
 };
+
+
+

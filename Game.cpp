@@ -8,6 +8,7 @@
 ***********************************************************************/
 #include "Game.h"
 #include "DataFormat.h"
+#include "Potion.h"
 #include <QApplication>
 #include <QFileDialog>
 #include <fstream>
@@ -56,16 +57,16 @@ bool Game::executeCommand(string command)
         try
         {
             QString filePath = QFileDialog::getOpenFileName(
-                nullptr,  // 父窗口，如果没有父窗口可以传入nullptr
-                "选择文件",  // 对话框标题
-                QDir::homePath(),  // 默认打开的目录
-                "文本文件 (*.txt);;所有文件 (*)"  // 文件过滤器
+                nullptr,
+                "選擇文件",
+                QDir::homePath(),
+                "文本文件 (*.txt);;所有文件 (*)"
                 );
 
             if (!filePath.isEmpty()) {
-                qDebug() << "选择的文件路径：" << filePath;
+                qDebug() << "選擇的文件路徑" << filePath;
             } else {
-                qDebug() << "未选择任何文件";
+                qDebug() << "為選擇任何文件";
             }
             ifstream file(filePath.toStdString());
             string line;
@@ -109,7 +110,9 @@ bool Game::executeCommand(string command)
     {
         if(command == "Bag")
         {
-            cout<<"Bag"<<endl;
+            cout << "Please choose potion to used: Potion, Super Potion, Hyper Potion, Max Potion." << endl;
+
+
         }
         else if(command == "Pokemon")
         {
@@ -143,4 +146,214 @@ bool Game::executeCommand(string command)
     }
     
     return true;
+}
+
+bool Game::useBag()
+{
+    string potionInput;
+    cin >> potionInput;
+
+    Pokemon& currPokemon = players[0].getPokemon();
+
+    if (potionInput == "Potion")
+    {
+        cout << "Choose pokemon to used the potion : ";
+
+        Player& currentPlayer = this->players[0];
+        for (int i = 0; i < currentPlayer.pokemons.size(); i++)
+        {
+            cout << currentPlayer.pokemons[i].getName() << " ";
+        }
+        cout << endl;
+
+        string healPokemon;
+        cin >> healPokemon;
+
+        if (healPokemon == "Exit")
+        {
+            // go back to the main menu
+            return false;
+        }
+
+        else
+        {
+            bool found = false;
+            int targetIdx = -1;
+            for (int i = 0; i < currentPlayer.pokemons.size(); i++)
+            {
+                string tempPokemon = currentPlayer.pokemons[i].getName();
+                if (healPokemon == tempPokemon)
+                {
+                    targetIdx = i;
+                    found = true;
+                    continue;
+                }
+
+                if (!found)
+                {
+                    cout << "Invalid Pokemon to heal" << endl;
+                }
+
+                else
+                {
+                    // call the function to used the potion
+                    Potion heal;
+                    heal.update(currentPlayer.pokemons[i]);
+                }
+            }
+        }
+    }
+
+    else if (potionInput == "Super Potion")
+    {
+        cout << "Choose pokemon to used the potion : ";
+
+        Player& currentPlayer = this->players[0];
+        for (int i = 0; i < currentPlayer.pokemons.size(); i++)
+        {
+            cout << currentPlayer.pokemons[i].getName() << " ";
+        }
+        cout << endl;
+
+        string healPokemon;
+        cin >> healPokemon;
+
+        if (healPokemon == "Exit")
+        {
+            // go back to the main menu
+            return false;
+        }
+
+        else
+        {
+            bool found = false;
+            int targetIdx = -1;
+            for (int i = 0; i < currentPlayer.pokemons.size(); i++)
+            {
+                string tempPokemon = currentPlayer.pokemons[i].getName();
+                if (healPokemon == tempPokemon)
+                {
+                    targetIdx = i;
+                    found = true;
+                    continue;
+                }
+
+                if (!found)
+                {
+                    cout << "Invalid Pokemon to heal" << endl;
+                }
+
+                else
+                {
+                    // call the function to used the potion
+                    SuperPotion heal;
+                    heal.update(currentPlayer.pokemons[i]);
+                }
+            }
+        }
+    }
+
+    else if (potionInput == "Hyper Potion")
+    {
+        cout << "Choose pokemon to used the potion : ";
+
+        Player& currentPlayer = this->players[0];
+        for (int i = 0; i < currentPlayer.pokemons.size(); i++)
+        {
+            cout << currentPlayer.pokemons[i].getName() << " ";
+        }
+        cout << endl;
+
+        string healPokemon;
+        cin >> healPokemon;
+
+        if (healPokemon == "Exit")
+        {
+            // go back to the main menu
+            return false;
+        }
+
+        else
+        {
+            bool found = false;
+            int targetIdx = -1;
+            for (int i = 0; i < currentPlayer.pokemons.size(); i++)
+            {
+                string tempPokemon = currentPlayer.pokemons[i].getName();
+                if (healPokemon == tempPokemon)
+                {
+                    targetIdx = i;
+                    found = true;
+                    continue;
+                }
+
+                if (!found)
+                {
+                    cout << "Invalid Pokemon to heal" << endl;
+                }
+
+                else
+                {
+                    // call the function to used the potion
+                    HyperPotion heal;
+                    heal.update(currentPlayer.pokemons[i]);
+                }
+            }
+        }
+    }
+
+    else if (potionInput == "Max Potion")
+    {
+
+        cout << "Choose pokemon to used the potion : ";
+
+        Player& currentPlayer = this->players[0];
+        for (int i = 0; i < currentPlayer.pokemons.size(); i++)
+        {
+            cout << currentPlayer.pokemons[i].getName() << " ";
+        }
+        cout << endl;
+
+        string healPokemon;
+        cin >> healPokemon;
+
+        if (healPokemon == "Exit")
+        {
+            // go back to the main menu
+            return false;
+        }
+
+        else
+        {
+            bool found = false;
+            int targetIdx = -1;
+            for (int i = 0; i < currentPlayer.pokemons.size(); i++)
+            {
+                string tempPokemon = currentPlayer.pokemons[i].getName();
+                if (healPokemon == tempPokemon)
+                {
+                    targetIdx = i;
+                    found = true;
+                    continue;
+                }
+
+                if (!found)
+                {
+                    cout << "Invalid Pokemon to heal" << endl;
+                }
+
+                else
+                {
+                    // call the function to used the potion
+                    MaxPotion heal;
+                    heal.update(currentPlayer.pokemons[i]);
+                }
+            }
+        }
+    }
+
+    else
+    {
+        cout << "No such " << potionInput << "in the bag." << endl;
+    }
 }
