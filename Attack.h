@@ -41,6 +41,6 @@ public:
     Attack();
     double getPower();
     double getAtk();
-    double calculateDmg(string& moveNames);
+    double calculateDmg(string& moveNames, int curTurns);
     
 };
