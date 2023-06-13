@@ -74,6 +74,8 @@ public:
     void beParalysis();
     //set Pokemon burned
     void beBurned();
+
+    void setMoves(vector<Move>& moves);
     
     //Pokemon receive damage
     void receiveDamage(double damage);

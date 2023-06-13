@@ -8,8 +8,8 @@
 ***********************************************************************/
 #pragma once
 #include "Player.h"
-#include "EnumList.h"
 #include "Move.h"
+#include "QtWidgets/qwidget.h"
 #include <QObject>
 #include <string>
 #include <vector>

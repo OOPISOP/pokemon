@@ -21,9 +21,9 @@ ApplicationWindow
             }
             Button
             {
-                x: 300
+                x: 100
                 y: 300
-                id:blackSurrend
+                id:bag
                 text: "Bag"
                 onClicked:
                 {
@@ -31,6 +31,19 @@ ApplicationWindow
                     //console.log("Button clicked!")
                 }
             }
+            Button
+            {
+                x: 300
+                y: 300
+                id:loadTestCase
+                text: "Load TestCase"
+                onClicked:
+                {
+                    game.executeCommand("Load TestCase");
+                    //console.log("Button clicked!")
+                }
+            }
+
         }
     }
     StackView

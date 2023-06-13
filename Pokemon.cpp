@@ -305,6 +305,11 @@ bool Pokemon::isBurned()
     return stateList[State::BURN_STATE];
 }
 
+void Pokemon::setMoves(vector<Move>& moves)
+{
+    this->moves = moves;
+}
+
 /**
  * Intent:poison attack
  * Pre:target pokemon

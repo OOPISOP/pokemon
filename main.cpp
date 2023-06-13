@@ -10,7 +10,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-
+#include <QTemporaryFile>
 
 /**
  * Intent: Run CLI
@@ -19,42 +19,14 @@
 */
 void runCommandLine()
 {
-    // Variables.
     Game game;
-    DataFormat dataFormat;
-    string fileName;
-    fstream testCaseFile;
     string commandLine;
-
-    // Initialise testcase.
-    std::cin >> fileName;
-    testCaseFile.open(fileName);
-    //Error Proof
-    if(!testCaseFile.is_open())
+    // Read commands.
+    while(getline(cin,commandLine))
     {
-        cout<< "The input testcase: \"" << fileName << "\" cannot be opened." << endl;
-        return;
+        game.executeCommand(commandLine);
     }
 
-    // Initialise pokemon library.
-    testCaseFile >> fileName;
-    dataFormat.loadPokemonData(fileName, &game);
-
-    // Initialise move library.
-    testCaseFile >> fileName;
-    dataFormat.loadMoveData(fileName, &game);
-
-    // Initialise game data.
-    testCaseFile >> fileName;
-    dataFormat.loadGameData(fileName, &game);
-
-//    // Read commands.
-//    while(getline(testCaseFile,commandLine))
-//    {
-//        game.executeCommand(commandLine);
-//    }
-
-    testCaseFile.close();
 }
 /**
  * Intent: Run GUI
@@ -63,10 +35,9 @@ void runCommandLine()
 */
 int runGUI(int argc, char** argv)
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-
     // 註冊C++ class
     qmlRegisterType<Game>("com.game", 1, 0, "Game");
 
@@ -76,11 +47,13 @@ int runGUI(int argc, char** argv)
     return app.exec();
 }
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
+
     if(argc == 1)
     {
-        return runGUI(argc,argv);
+
+       return runGUI(argc,argv);
     }
     else if (string(argv[1]) == string("CommandInput") && argc == 2)
     {

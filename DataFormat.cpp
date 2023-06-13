@@ -8,20 +8,22 @@
 ***********************************************************************/
 #include "DataFormat.h"
 
+
 /**
  * Intent:Load Pokemon data from file
  * Pre:Pokemon data file name
  * Pos:return pokemons
  */
-void DataFormat::loadPokemonData(string fileName, Game *game)
+bool DataFormat::loadPokemonData(string fileName, Game *game)
 {
     ifstream pokemonData(fileName);
     //Error Proof
      if(!pokemonData.is_open())
      {
         cout<<fileName<<" Can't Open"<<endl;
-        return;
+        return false;
      }
+     game->pokemons.clear();
     string line;
     while(getline(pokemonData,line))
     {
@@ -56,12 +58,13 @@ void DataFormat::loadPokemonData(string fileName, Game *game)
         //Add Pokemon
         game->pokemons.push_back(pokemon);
     }
+    return true;
 }
 
 // Intent:  Load move data from file.
 // Pre:     Move data file name.
 // Post:    Print failed if file cannot be opened.
-void DataFormat::loadMoveData(string fileName, Game *game)
+bool DataFormat::loadMoveData(string fileName, Game *game)
 {
     ifstream moveDataFile(fileName);
 
@@ -69,9 +72,9 @@ void DataFormat::loadMoveData(string fileName, Game *game)
     if(!moveDataFile.is_open())
     {
         cout<<fileName<<" Cannot be opened"<<endl;
-        return;
+        return false;
     }
-
+    game->moves.clear();
     string name;
     while(moveDataFile >> name)
     {
@@ -119,12 +122,13 @@ void DataFormat::loadMoveData(string fileName, Game *game)
         // Next line.
         moveDataFile.ignore();
     }
+    return true;
 }
 
 // Intent:  Load Game data from file.
 // Pre:     Game data file name.
 // Post:    Print failed if file cannot be opened.
-void DataFormat::loadGameData(string fileName, Game *game)
+bool DataFormat::loadGameData(string fileName, Game *game)
 {
     ifstream gameDataFile(fileName);
 
@@ -132,9 +136,9 @@ void DataFormat::loadGameData(string fileName, Game *game)
     if(!gameDataFile.is_open())
     {
         cout<<fileName<<" Cannot be opened"<<endl;
-        return;
+        return false;
     }
-
+    game->players.clear();
     // Initialise Players in the game.
     for (int i = 0; i < 2; i++)
     {
@@ -162,9 +166,10 @@ void DataFormat::loadGameData(string fileName, Game *game)
                 if (game->pokemons[l].getName() == pokemonName)
                 {
                     aPokemon = game->pokemons[l];
+                    break;
                 }
             }
-
+            vector<Move> moves;
             // Add Moves.
             for (int k = 0; k < moveNumber; k++)
             {
@@ -173,12 +178,13 @@ void DataFormat::loadGameData(string fileName, Game *game)
                 // Find Move in library.
                 for (int m = 0; m < game->moves.size(); m++)
                 {
-                    if (game->moves[m].name == moveName)
+                    if (game->moves[m].getName() == moveName)
                     {
-                        aPokemon.moves.push_back(game->moves[m]);
+                        moves.push_back(game->moves[m]);
                     }
                 }
             }
+            aPokemon.setMoves(moves);
             gameDataFile.ignore();
         }
 
@@ -188,4 +194,5 @@ void DataFormat::loadGameData(string fileName, Game *game)
         // Skip to next line and read new Player.
         gameDataFile.ignore();
     }
+    return true;
 }

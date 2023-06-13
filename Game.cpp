@@ -7,7 +7,12 @@
  * Description: This C++ program is Pokemon Game Manager
 ***********************************************************************/
 #include "Game.h"
-
+#include "DataFormat.h"
+#include <QApplication>
+#include <QFileDialog>
+#include <fstream>
+#include <QTemporaryFile>
+#include <filesystem>
 
 //Game Constructor
 
@@ -46,20 +51,65 @@ bool Game::executeCommand(QString command)
  */
 bool Game::executeCommand(string command)
 {
-    //Error Proof
+    if(command == "Load TestCase")
+    {
+        try
+        {
+            QString filePath = QFileDialog::getOpenFileName(
+                nullptr,  // 父窗口，如果没有父窗口可以传入nullptr
+                "选择文件",  // 对话框标题
+                QDir::homePath(),  // 默认打开的目录
+                "文本文件 (*.txt);;所有文件 (*)"  // 文件过滤器
+                );
+
+            if (!filePath.isEmpty()) {
+                qDebug() << "选择的文件路径：" << filePath;
+            } else {
+                qDebug() << "未选择任何文件";
+            }
+            ifstream file(filePath.toStdString());
+            string line;
+            while(getline(file,line))
+            {
+                executeCommand(line);
+            }
+        }
+        catch (const int error_code)
+        {
+            cout<<error_code<<endl;
+        }
+
+        return true;
+    }
     if(command.empty())
     {
         return false;
     }
+    if(pokemons.empty())
+    {
+        DataFormat data;
+        data.loadPokemonData(command,this);
+        return true;
+    }
+    if(moves.empty())
+    {
+        DataFormat data;
+        data.loadMoveData(command,this);
+        return true;
+    }
+    if(players.empty())
+    {
+        DataFormat data;
+        data.loadGameData(command,this);
+        return true;
+    }
 
-//    currentTurn = (players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon].getSpeed() >
-//                        players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon].getSpeed()) ?
-//                           PLAYER_TURN : OPPONENT_TURN;
+    //Error Proof
     try
     {
         if(command == "Bag")
         {
-            cout<<"bag"<<endl;
+            cout<<"Bag"<<endl;
         }
         else if(command == "Pokemon")
         {
@@ -89,7 +139,7 @@ bool Game::executeCommand(string command)
     catch(int failed)
     {
         cout << "Failed" << endl;
-		return false;
+        return false;
     }
     
     return true;
