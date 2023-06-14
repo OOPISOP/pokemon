@@ -100,7 +100,7 @@ string stateToString(int state)
     }
     else if(state == PARALYSIS_STATE)
     {
-        return "PSN";
+        return "PAR";
     }
     else if(state == FAINTING_STATE)
     {
@@ -112,8 +112,8 @@ string stateToString(int state)
 Pokemon::Pokemon()
 {
 }
-Pokemon::Pokemon(string name, vector<Attribute> types, double maxHP, double atk, double def, double spAtk, double spDef, double speed)
-{   
+Pokemon::Pokemon(string name, vector<Attribute> types, int maxHP, double atk, double def, double spAtk, double spDef, double speed)
+{
     initStateList();
     this->name = name;
     this->types = types;
@@ -179,7 +179,7 @@ vector<Attribute> Pokemon::getTypes()const
  * Pre: hp
  * Pos: return Pokemon Hp
  */
-double Pokemon::getHp()const
+int Pokemon::getHp()const
 {
     return this->hp;
 }
@@ -188,7 +188,7 @@ double Pokemon::getHp()const
  * Pre: maxHP
  * Pos: return Pokemon Max HP
  */
-double Pokemon::getMaxHP()const
+int Pokemon::getMaxHP()const
 {
     return this->maxHP;
 }
@@ -374,7 +374,7 @@ void Pokemon::poisonAttack(Pokemon& target)
  * Pos:target be paralysis
 */
 void Pokemon::paralysisAttack(Pokemon& target)
-{   
+{
     target.beParalysis(true, true);
 }
 /**
@@ -393,7 +393,7 @@ void Pokemon::burnAttack(Pokemon& target)
 */
 double Pokemon::effectDamage()
 {
-    return  getMaxHP() * (1/16);
+    return  this->maxHP/16;
 }
 
 /**
@@ -428,6 +428,8 @@ bool Pokemon::useMove(Pokemon& target, int moveIndex, int turnNumber, bool turn,
     }
     else
     {
+        int damage = 0;
+
         if (moves[moveIndex].type == PHYSICAL)
         {
             damage = moves[moveIndex].calcDamage(*this,target, PHYSICAL, testMode, turnNumber);

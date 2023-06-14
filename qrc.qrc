@@ -2,5 +2,6 @@
 <RCC>
 <qresource prefix="/">
     <file>qml/main.qml</file>
+    <file>music/Pallet_Town_Theme.wav</file>
 </qresource>
 </RCC>

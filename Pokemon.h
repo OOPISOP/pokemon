@@ -27,8 +27,8 @@ private:
     string name;//Pokemon Name
     vector<Attribute> types;//Pokemon Type
     vector<Move> moves;//Pokemon Attack
-    double maxHP;//Pokemon Max HP
-    double hp;//Pokemon HP
+    int maxHP;//Pokemon Max HP
+    int hp;//Pokemon HP
     double atk;//Pokemon Attack
     double def;//Pokemon Defense
     double spAtk;//Pokemon Special Attack
@@ -40,7 +40,7 @@ public:
     float effectiveness;
     //Pokemon Constructor
     Pokemon();
-    Pokemon(string name, vector<Attribute> types, double maxHP, double atk, double def, double spAtk, double spDef, double speed);
+    Pokemon(string name, vector<Attribute> types, int maxHP, double atk, double def, double spAtk, double spDef, double speed);
     //Pokemon Destructor
     ~Pokemon();
 
@@ -56,9 +56,9 @@ public:
     //get Pokemon Types
     vector<Attribute> getTypes()const;
     //get Pokemon HP
-    double getHp()const;
+    int getHp()const;
     //get Pokemon Max HP
-    double getMaxHP()const;
+    int getMaxHP()const;
     //get Pokemon Attack
     double getAtk()const;
     //get Pokemon Defense

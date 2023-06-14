@@ -14,12 +14,22 @@
 #include <fstream>
 #include <QTemporaryFile>
 #include <filesystem>
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QSoundEffect>
+#include <random>
 
 //Game Constructor
 
 Game::Game()
 {
     isTestMode = false;
+    this->effect.setVolume(1.f);
+    effect.setSource(QUrl::fromLocalFile(loadSound));
+    effect.setLoopCount(QSoundEffect::Infinite);
+    effect.play();
     turnNumber = 1;
     playable = true;
 }
@@ -35,6 +45,7 @@ Game::~Game()
  */
 bool Game::executeCommand(QString command)
 {
+    isRand = true;
     string stdString = command.toStdString();
     if(executeCommand(stdString))
     {
@@ -67,18 +78,25 @@ bool Game::executeCommand(string command)
     {
         DataFormat data;
         data.loadPokemonData(command,this);
+        if(pokemons.empty())cout<<"Load Faild PokemonData"<<endl;
         return true;
     }
     if(moves.empty())
     {
         DataFormat data;
         data.loadMoveData(command,this);
+        if(moves.empty())cout<<"Load Faild MoveData"<<endl;
         return true;
     }
     if(players.empty())
     {
         DataFormat data;
         data.loadGameData(command,this);
+        if(players.empty())cout<<"Load Faild GameData"<<endl;
+            currentTurn = (players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon].getSpeed() >
+                           players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon].getSpeed()) ?
+                              PLAYER_TURN : OPPONENT_TURN;
+            if(currentTurn == OPPONENT_TURN&&isRand )randomMove();
         return true;
     }
     currentTurn = (players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon].getSpeed() >
@@ -87,22 +105,43 @@ bool Game::executeCommand(string command)
     //Error Proof
     try
     {
-        if(command == "Pokemon")
+        if(command == "Pokemon"||pokemonTimes)
         {
-            string command2;
-
             // Swap Pokemon.
-            swapPokemon(currentTurn);
-
+            if(!pokemonTimes)
+            {
+                swapPokemon(currentTurn,"");
+            }
+            else if(pokemonTimes == 1)
+            {
+                swapPokemon(currentTurn,command);
+            }
+            else if(pokemonTimes == 2)
+            {
+                if(!useMove(command, !currentTurn, isTestMode))
+                {
+                    return false;
+                }
+            }
             // Attack from second players.
-            cin >> command2;
-            battle(command2, !currentTurn, isTestMode);
+            pokemonTimes++;
+            if(flag)
+            {
+                flag = false;
+                pokemonTimes = 0;
+            }
+            if(pokemonTimes==3)
+            {
+                pokemonTimes = 0;
+                emit updatePokemonInfo();
+                turnNumber++;
+            }
             // B & P.
             bAndP();
 
             turnNumber++;
         }
-        else if (command == "Bag")
+        else if (command == "Bag" || bagTimes)
         {
             // Use potion.
             useBag();
@@ -116,28 +155,36 @@ bool Game::executeCommand(string command)
 
             turnNumber++;
         }
-        else if(command == "Battle")
+        else if(command == "Battle" || battleTimes)
         {
-            Player *ourPlayer = &players[PLAYER_TURN];
-            Player *opponent = &players[OPPONENT_TURN];
-
-            currentTurn = (ourPlayer->pokemons[ourPlayer->currentPokemon].getSpeed()
-                           > opponent->pokemons[opponent->currentPokemon].getSpeed()) ? PLAYER_TURN : OPPONENT_TURN;
-
-            string command2, command3;
-            cin >> command2;
-            cin >> command3;
-
-            // Attack from second players.
-            battle(command2, currentTurn, isTestMode);
-
-            // Attack from second players.
-            battle(command3, !currentTurn, isTestMode);
-
-            // B & P.
-            bAndP();
-
-            turnNumber++;
+            if(battleTimes == 1)
+            {
+                if(!useMove(command, currentTurn, isTestMode))
+                {
+                    return false;
+                }
+            }
+            else if(battleTimes == 2)
+            {
+                if(!useMove(command, !currentTurn, isTestMode))
+                {
+                    return false;
+                }
+            }
+            battleTimes++;
+            if(battleTimes==2&&currentTurn!=OPPONENT_TURN&&isRand)
+            {
+                randomMove();
+            }
+            emit updatePokemonInfo();
+            if(battleTimes == 3)
+            {
+                // B & P.
+                bAndP();
+                emit updatePokemonInfo();
+                battleTimes=0;
+                turnNumber++;
+            }
         }
         else if(command == "Check")
         {
@@ -205,23 +252,36 @@ int Game::findMove(Pokemon &aPokemon, string moveName)
 
     return -1;
 }
+vector<string> Game::findAvailablePokemon(int turn)
+{
+    vector<string> pokemons;
+    for (int i = 0; i < players[turn].pokemons.size(); i++)
+    {
+        if (players[turn].pokemons[i].getHp() > 0)
+        {
+            pokemons.push_back(players[turn].pokemons[i].getName());
+        }
+    }
+    return pokemons;
+}
 
 // Intent:  To swap Pokemon.
 // Pre:     None.
 // Post:    The function changed currentPokemon value.
-void Game::swapPokemon(bool turn)
+void Game::swapPokemon(bool turn,string command)
 {
-    if (turn == OPPONENT_TURN)
+    if (turn == OPPONENT_TURN&&command.size()==0)
     {
         bool found = false;
-        for (int i = 0; i < players[turn].pokemons.size(); i++)
-        {
-            if (players[turn].pokemons[i].getHp() > 0)
-            {
-                players[turn].currentPokemon = i;
-                found = true;
-            }
-        }
+//        for (int i = 0; i < players[turn].pokemons.size(); i++)
+//        {
+//            if (players[turn].pokemons[i].getHp() > 0)
+//            {
+//                players[turn].currentPokemon = i;
+//                found = true;
+//            }
+//        }
+        if(findAvailablePokemon(turn).size()>0)found = true;
 
         if (!found)
         {
@@ -234,31 +294,54 @@ void Game::swapPokemon(bool turn)
            cout << "[Turn " << turnNumber << "] ";
             cout << gameResult << endl;
         }
+        emit stringList(getStringList(findAvailablePokemon(turn)));
+        return;
     }
-    else
+    else if(turn == PLAYER_TURN&&command.size()==0)
     {
         bool found = false;
-        for (int i = 0; i < players[turn].pokemons.size(); i++)
-        {
-            if (players[turn].pokemons[i].getHp() > 0)
-            {
-                found = true;
-            }
-        }
+//        for (int i = 0; i < players[turn].pokemons.size(); i++)
+//        {
+//            if (players[turn].pokemons[i].getHp() > 0)
+//            {
+//                found = true;
+//            }
+//        }
+
+        if(findAvailablePokemon(turn).size()>0)found = true;
 
         if (!found)
         {
             playable = false;
-            winOrLose = false;
+            winOrLose = true;
 
             string gameResult;
             gameResult = (winOrLose) ? "You win" : "You lose";
 
-           cout << "[Turn " << turnNumber << "] ";
+            cout << "[Turn " << turnNumber << "] ";
             cout << gameResult << endl;
         }
         else
         {
+            // Output the pokemon available
+            cout << "Available Pokemon(s):" << endl;
+            for (int i = 0; i < players[turn].pokemons.size(); i++)
+            {
+                if (players[turn].pokemons[i].getHp() > 0)
+                {
+                    cout << players[turn].pokemons[i].getName() << " ";
+                }
+            }
+            cout << endl;
+            emit stringList(getStringList(findAvailablePokemon(turn)));
+            cout << "Type \"exit\" to teminate swap." << endl;
+        }
+        return;
+    }
+    else
+    {
+
+            if (command == "exit")
             string command;
             cin >> command;
             bool found = false;
@@ -278,55 +361,82 @@ void Game::swapPokemon(bool turn)
                         cout << "Go! " << players[turn].pokemons[i].getName() << "!" << endl;
                     }
                     found = true;
-
+                            }
+                if(!found)
+                {
+                    cout << "Invalid input pokemon to swap." << endl;
+                    swapPokemon(turn,"");
                     break;
                 }
             }
-        }
     }
 }
-
 // Intent:  To use a move to the opponent Pokemon.
 // Pre:     Player's pokemons must have been initialised.
 // Post:    The function used move.
-void Game::useMove(string moveName, bool turn, bool testMode)
+bool Game::useMove(string moveName, bool turn, bool testMode)
 {
     Pokemon *attackPokemon = &players[turn].pokemons[players[turn].currentPokemon];
-
-    // Check Fainting
-    if (attackPokemon->getHp() <= 0)
-    {
-        cout << "[Turn " << turnNumber << "] ";
-        if (turn == OPPONENT_TURN)
-        {
-            cout << "The opposing " << attackPokemon->getName() << " fainted!" << endl;
-            swapPokemon(OPPONENT_TURN);
-        }
-        else
-        {
-            swapPokemon(PLAYER_TURN);
-            cout << attackPokemon->getName() << " fainted!" << endl;
-        }
-    }
 
     // Unable to attack.
     if (attackPokemon->isParalysis())
     {
        cout << "[Turn " << turnNumber << "] ";
-        cout << attackPokemon->getName() << " is paralyzed!\nIt can't move!" << endl;
-        return;
+        cout << "<" << attackPokemon->getName() << ">";
+        cout << " is paralyzed!\nIt can't move!" << endl;
+        return false;
     }
 
     // Attack if able to attack.
     Pokemon *defendPokemon = &players[!turn].pokemons[players[!turn].currentPokemon];
     int moveIndex = findMove(*attackPokemon, moveName);
-
-    cout << "[Turn " << turnNumber << "] ";
-    if (turn == OPPONENT_TURN)
+    if(moveIndex<0)
     {
-        cout << "The opposing ";
+        cout<<"No move"<<endl;
+        return false;
     }
-    attackPokemon->useMove(*defendPokemon, moveIndex, turnNumber, turn, testMode);
+     attackPokemon->useMove(*defendPokemon, moveIndex, turnNumber, turn, testMode);
+
+    // Output messege.
+    if (defendPokemon->isBurned())
+    {
+       cout << "[Turn " << turnNumber << "] ";
+        cout << "<" << defendPokemon->getName() << ">";
+        cout << " was burned!" << endl;
+    }
+    if (defendPokemon->isParalysis())
+    {
+       cout << "[Turn " << turnNumber << "] ";
+        cout << "<" << defendPokemon->getName() << ">";
+        cout << " is paralyzed, so it may be unable to move!" << endl;
+    }
+    if (defendPokemon->isPoisoned())
+    {
+       cout << "[Turn " << turnNumber << "] ";
+        cout << "<" << defendPokemon->getName() << ">";
+        cout << " was poisoned!" << endl;
+    }
+
+    // Check Fainting
+    if (defendPokemon->getHp() <= 0)
+    {
+       cout << "[Turn " << turnNumber << "] ";
+        if (turn == OPPONENT_TURN)
+        {
+            cout << "The opposing " << defendPokemon->getName() << " fainted!" << endl;
+            swapPokemon(OPPONENT_TURN,"");
+            pokemonTimes = 1;
+            flag = true;
+        }
+        else
+        {
+            swapPokemon(PLAYER_TURN,"");
+            pokemonTimes = 1;
+            flag = true;
+            cout << defendPokemon->getName() << " fainted!" << endl;
+        }
+    }
+    return true;
 }
 
 // Intent:  To check B & P.
@@ -352,7 +462,9 @@ void Game::bAndP()
     {
         cout << "[Turn " << turnNumber << "] ";
         cout << attackPokemon->getName() << " fainted!" << endl;
-        swapPokemon(PLAYER_TURN);
+        swapPokemon(PLAYER_TURN,"");
+        pokemonTimes = 1;
+        flag = true;
     }
 
     Pokemon *defendPokemon = &players[!currentTurn].pokemons[players[!currentTurn].currentPokemon];
@@ -376,9 +488,14 @@ void Game::bAndP()
         cout << "[Turn " << turnNumber << "] ";
         defendPokemon->applyNegativeEffect();
         cout << "The opposing " << defendPokemon->getName() << " fainted!" << endl;
-        swapPokemon(OPPONENT_TURN);
+        swapPokemon(OPPONENT_TURN,"");
+        pokemonTimes = 1;
+        flag = true;
     }
 }
+
+
+
 
 // Intent:  To check Pokemon's faint status.
 // Pre:     Player's Pokemons must have been initialised.
@@ -484,15 +601,15 @@ bool Game::loadTestCase()
     {
         QString filePath = QFileDialog::getOpenFileName(
             nullptr,
-            "選擇文件",
+            "Chose Data",
             QDir::homePath(),
             "文本文件 (*.txt);;所有文件 (*)"
             );
 
         if (!filePath.isEmpty()) {
-            qDebug() << "選擇的文件路徑" << filePath;
+            qDebug() << "Chose Data Path" << filePath;
         } else {
-            qDebug() << "為選擇任何文件";
+            qDebug() << "no chose any data";
         }
         loadTestCase(filePath.toStdString());
     }
@@ -515,15 +632,15 @@ bool Game::loadPokemonData()
     {
         QString filePath = QFileDialog::getOpenFileName(
             nullptr,
-            "選擇文件",
+            "Chose Data",
             QDir::homePath(),
             "文本文件 (*.txt);;所有文件 (*)"
             );
 
         if (!filePath.isEmpty()) {
-            std::cout << "選擇的文件路徑" << filePath.toStdString()<<endl;
+            std::cout << "Chose Data Path" << filePath.toStdString()<<endl;
         } else {
-            std::cout << "為選擇任何文件"<<endl;
+            std::cout << "no chose any data"<<endl;
         }
         DataFormat data;
         data.loadPokemonData(filePath.toStdString(),this);
@@ -545,15 +662,15 @@ bool Game::loadMoveData()
     {
         QString filePath = QFileDialog::getOpenFileName(
             nullptr,
-            "選擇文件",
+            "Chose Data",
             QDir::homePath(),
             "文本文件 (*.txt);;所有文件 (*)"
             );
 
         if (!filePath.isEmpty()) {
-            std::cout << "選擇的文件路徑" << filePath.toStdString()<<endl;
+            std::cout << "Chose Data Path" << filePath.toStdString()<<endl;
         } else {
-            std::cout << "為選擇任何文件"<<endl;
+            std::cout << "no chose any data"<<endl;
         }
         DataFormat data;
         data.loadMoveData(filePath.toStdString(),this);
@@ -575,15 +692,15 @@ bool Game::loadGameData()
     {
         QString filePath = QFileDialog::getOpenFileName(
             nullptr,
-            "選擇文件",
+            "Chose Data",
             QDir::homePath(),
             "文本文件 (*.txt);;所有文件 (*)"
             );
 
         if (!filePath.isEmpty()) {
-            qDebug() << "選擇的文件路徑" << filePath;
+            qDebug() << "Chose Data Path" << filePath;
         } else {
-            qDebug() << "為選擇任何文件";
+            qDebug() << "no chose any data";
         }
         DataFormat data;
         data.loadGameData(filePath.toStdString(),this);
@@ -646,10 +763,81 @@ void Game::status()
 
 void Game::tellStory()
 {
-    cout << "Pokemon are creatures of all shapes and sizes who live in the wild \n"
-         << "or alongside their human partners (called “Trainers”).\n"
-         << "During their adventures, Pokemon grow and become more experienced \n"
-         << "and even, on occasion, evolve into stronger Pokemon.\n"
-         << "Hundreds of known Pokemon inhabit the Pokemon universe, \n"
-         << "with untold numbers waiting to be discovered!" << endl;
+
+//    cout << "Pokemon are creatures of all shapes and sizes who live in the wild \n"
+//         << "or alongside their human partners (called “Trainers”).\n"
+//         << "During their adventures, Pokemon grow and become more experienced \n"
+//         << "and even, on occasion, evolve into stronger Pokemon.\n"
+//         << "Hundreds of known Pokemon inhabit the Pokemon universe, \n"
+//         << "with untold numbers waiting to be discovered!" << endl;
+}
+
+bool Game::checkAllDataLoaded()
+{
+    if(!pokemons.empty()&&!moves.empty()&&!players.empty())
+    {
+        return true;
+    }
+    QDialog dialog;
+    QVBoxLayout layout(&dialog);
+    QLabel label(QString::fromStdString("please load data"),&dialog);
+    dialog.setFixedSize(100,100);
+    dialog.exec();
+    return false;
+}
+
+QString Game::getMoveName(int index)
+{
+    if(players.empty()||moves.empty()||pokemons.empty())return "No Data";
+    Pokemon* pokemon = &players[0].pokemons[players[0].currentPokemon];
+    cout<<pokemon->getMoves()[index].getName()<<endl;
+    return QString::fromStdString(pokemon->getMoves()[index].getName());
+}
+
+QString Game::getCurrentStatus(int index)
+{
+    if(players.empty()||moves.empty()||pokemons.empty())return "No Pokemon";
+     Pokemon* pokemon = &players[index].pokemons[players[index].currentPokemon];
+    string s = pokemon->getName();
+    s+=" " + to_string(pokemon->getHp())+"/"+ to_string(pokemon->getMaxHP());
+    for(const auto& state: pokemon->getStateList())
+    {
+        if(state==true)
+        {
+            s+=" " + stateToString(state);
+        }
+    }
+    QString info = QString::fromStdString(s);
+    return info;
+}
+
+void Game::randomMove()
+{
+     if(players.empty()||moves.empty()||pokemons.empty())
+    {
+        cout<<"No Pokemon"<<endl;
+        return ;
+    }
+     srand(time(nullptr));
+
+     Pokemon* pokemon = &players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon];
+     int radom_variable = rand()%pokemon->getMoves().size();
+     if(currentTurn == OPPONENT_TURN)
+     {
+        string command = "Battle";
+        executeCommand(command);
+        return;
+     }
+     executeCommand(pokemon->getMoves()[radom_variable].getName());
+}
+
+QStringList Game::getStringList(vector<string> v)
+{
+     QStringList qStringList;
+     for (const std::string& str : v)
+     {
+        qStringList.append(QString::fromStdString(str));
+     }
+
+     return qStringList;
 }

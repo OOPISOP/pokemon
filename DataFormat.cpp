@@ -121,7 +121,6 @@ bool DataFormat::loadMoveData(string fileName, Game *game)
         }
         attribute = stringToType(attributeString);
         type = stringToType(typeString);
-
         // Add a move to the library.
         Move aMove(name, attribute, type, power, accuracy, pp, isCon, con);
         game->moves.push_back(aMove);
