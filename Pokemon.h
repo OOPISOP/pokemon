@@ -36,7 +36,8 @@ private:
     double speed;//Pokemon Speed
 
 public:
-
+    // For Effevive message.
+    float effectiveness;
     //Pokemon Constructor
     Pokemon();
     Pokemon(string name, vector<Attribute> types, double maxHP, double atk, double def, double spAtk, double spDef, double speed);

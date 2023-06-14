@@ -59,7 +59,7 @@ void Move::reducePP()
  * @param target
  * @return move damage
  */
-int Move::calcDamage(const Pokemon& user,const Pokemon& target, int moveType)
+int Move::calcDamage(Pokemon& user,const Pokemon& target, int moveType)
 {
     float stab = 1;
     float typeTime = 1;
@@ -75,6 +75,12 @@ int Move::calcDamage(const Pokemon& user,const Pokemon& target, int moveType)
     {
         typeTime *= TYPE_EFFECT[type][time];
     }
+
+    user.effectiveness = typeTime;
+    cout << type << endl;
+    cout << time << endl;
+    cout << user.effectiveness << endl;
+
 
     int damage;
     if (moveType == PHYSICAL)

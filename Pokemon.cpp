@@ -436,34 +436,37 @@ bool Pokemon::useMove(Pokemon& target,int moveIndex, int turnNumber)
         }
         target.receiveDamage(damage);
         moves[moveIndex].reducePP();
+    }
+        cout << "[Turn " << turnNumber << "] ";
 
-        if (moves[moveIndex].type != STATUS)
+    cout<<this->name<<" used "<<moves[moveIndex].getName()<<"!"<<endl;
+
+    if (moves[moveIndex].type != STATUS)
+    {
+        // Output additional effect message.
+        if (effectiveness >= 2)
         {
-            // Output additional effect message.
-            if (damage >= 2)
+            cout << "[Turn " << turnNumber << "] ";
+            cout << "It's super effective!" << endl;
+        }
+        else if (effectiveness <= 0.5)
+        {
+            cout << "[Turn " << turnNumber << "] ";
+            cout << "It's not very effective..." << endl;
+        }
+        else if (effectiveness == 0)
+        {
+            if (moves[moveIndex].getCon() > 0)
+            {
+            }
+            else
             {
                 cout << "[Turn " << turnNumber << "] ";
-                cout << "It's super effective!" << endl;
-            }
-            else if (damage <= 0.5)
-            {
-                cout << "[" << turnNumber << "] ";
-                cout << "It's not very effective..." << endl;
-            }
-            else if (damage == 0)
-            {
-                if (moves[moveIndex].getCon() > 0)
-                {
-                }
-                else
-                {
-                    cout << "[" << turnNumber << "] ";
-                    cout << "It's not effective!" << endl;
-                }
+                cout << "It's not effective!" << endl;
             }
         }
     }
-    cout<<"<"<<this->name<<"> used <"<<moves[moveIndex].getName()<<">!"<<endl;
+
     return true;
 }
 

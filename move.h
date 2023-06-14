@@ -64,5 +64,5 @@ public:
     int getCon()const;//get con
     int getPP()const;
     void reducePP();//reduce pp
-    int calcDamage(const Pokemon& user, const Pokemon& target, int moveType);//calc damage
+    int calcDamage(Pokemon &user, const Pokemon& target, int moveType);//calc damage
 };
