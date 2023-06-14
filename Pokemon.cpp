@@ -399,7 +399,11 @@ void Pokemon::applyNegativeEffect()
  */
 bool Pokemon::useMove(Pokemon& target,int moveIndex)
 {
-    if(moves[moveIndex].getPP() <= 0)return false;
+    if(this->moves[moveIndex].getPP() <= 0)
+    {
+        cout<<"not enough pp"<<endl;
+        return false;
+    }
     if(moves[moveIndex].getCon() > 0)
     {
         int con = moves[moveIndex].getCon();
@@ -416,9 +420,12 @@ bool Pokemon::useMove(Pokemon& target,int moveIndex)
             target.beParalysis();
         }
     }
-    int damage = moves[moveIndex].calcDamage(*this,target);
-    target.receiveDamage(damage);
-    moves[moveIndex].reducePP();
+    else
+    {
+        int damage = moves[moveIndex].calcDamage(*this,target);
+        target.receiveDamage(damage);
+        moves[moveIndex].reducePP();
+    }
     cout<<"<"<<this->name<<"> used <"<<moves[moveIndex].getName()<<">!"<<endl;
     return true;
 }
