@@ -86,9 +86,13 @@ bool Game::executeCommand(string command)
     {
         if(command == "Pokemon")
         {
+//            swapPokemon();
+        }
+        else if (command == "Bag")
+        {
 
         }
-        else if((command == "Battle") || (command == "Bag"))
+        else if(command == "Battle")
         {
             string command2;
             cin >> command2;
@@ -126,49 +130,10 @@ bool Game::executeCommand(string command)
 // Post:    The function executed a turn.
 void Game::battle(string command1, string command2, bool currentTurn, bool testMode)
 {
-    if (command1 == "bag")
-    {
-        // First Pokemon being used potion.
-        string targetPokemon;
-        cin >> targetPokemon;
-        usePotion(currentTurn, targetPokemon, command2);
-
-        string OpponentMove;
-        cin >> OpponentMove;
-        if (OpponentMove == "bag")
-        {
-            // Second Pokemon being used potion.
-            string potionName;
-            cin >> potionName;
-            cin >> targetPokemon;
-            usePotion(!currentTurn, targetPokemon, potionName);
-        }
-        else
-        {
-            // Including second Pokemon damage calculation.
-            useMove(OpponentMove, !currentTurn, isTestMode);
-        }
-    }
-    else
-    {
-        // Including first Pokemon damage calculation.
-        useMove(command1, currentTurn, isTestMode);
-
-        if (command2 == "bag")
-        {
-            // Second Pokemon being used potion.
-            string potionName;
-            string targetPokemon;
-            cin >> potionName;
-            cin >> targetPokemon;
-            usePotion(!currentTurn, targetPokemon, potionName);
-        }
-        else
-        {
-            // Including second Pokemon damage calculation.
-            useMove(command2, !currentTurn, isTestMode);
-        }
-    }
+    // Including first Pokemon damage calculation.
+    useMove(command1, currentTurn, isTestMode);
+    // Including second Pokemon damage calculation.
+    useMove(command2, !currentTurn, isTestMode);
 }
 
 // Intent:  To find input Pokemon's index.
@@ -222,15 +187,6 @@ void Game::swapPokemon(bool turn, string pokemon1, string pokemon2)
     {
         cout << pokemon2 << " not found." << endl;
     }
-}
-
-// Intent:  To use a potion in bag to a Pokemon.
-// Pre:     d
-// Post:    d
-void Game::usePotion(bool turn, string targetPokemon, string potionName)
-{
-    cout << "Please choose potion to used: Potion, Super Potion, Hyper Potion, Max Potion." << endl;
-
 }
 
 // Intent:  To use a move to the opponent Pokemon.
