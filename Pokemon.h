@@ -108,5 +108,5 @@ public:
     void applyNegativeEffect();
 
     //use move
-    bool useMove(Pokemon& target,int moveIndex);
+    bool useMove(Pokemon& target, int moveIndex, int turnNumber);
 };

@@ -21,10 +21,17 @@ void runCommandLine()
 {
     Game game;
     string commandLine;
+
+    // Tell a short background story about Pokemon.
+    game.tellStory();
     // Read commands.
     while(getline(cin,commandLine))
     {
         game.executeCommand(commandLine);
+        if (game.playable == false)
+        {
+            break;
+        }
     }
 
 }

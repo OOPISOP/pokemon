@@ -29,6 +29,9 @@ class Game : public QObject
 public:
     bool currentTurn;
     bool isTestMode;
+    int turnNumber;
+    bool playable;
+    bool winOrLose;
     vector<Player> players;
     vector<Pokemon> pokemons;   // Library of Pokemons
     vector<Move> moves;         // Library of Pokemon Move
@@ -70,13 +73,18 @@ public:
     // Check whether move exists and find index.
     int findMove(Pokemon &aPokemon, string moveName);
     // Swap Pokemon.
-    void swapPokemon(bool turn, string pokemon1, string pokemon2);
+    void swapPokemon(bool turn);
     // Use a potion in bag to a Pokemon.
     void usePotion(bool turn, string targetPokemon, string potionName);
     // Use a move to the opponent Pokemon.
     void useMove(string moveName, bool turn, bool testMode);
     // Check Pokemon's faint status.
     bool checkFainting(bool turn);
+    // To check B & P.
+    void bAndP();
+
+    // Tell user about Pokemon's story.
+    void tellStory();
 };
 
 

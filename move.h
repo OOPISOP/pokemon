@@ -48,7 +48,6 @@ class Move
 private:
     string name;
     int attribute;
-    int type;
     int power;
     int accuracy;
     int pp;
@@ -56,6 +55,8 @@ private:
     int con;
     float critical = 1;
 public:
+    int type;
+
     Move(string name, int attribute, int type, int power, int accuracy, int pp, bool isCon, int con);
 
     string getName()const;//get name
@@ -63,5 +64,5 @@ public:
     int getCon()const;//get con
     int getPP()const;
     void reducePP();//reduce pp
-    int calcDamage(const Pokemon& user,const Pokemon& target);//calc damage
+    int calcDamage(const Pokemon& user, const Pokemon& target, int moveType);//calc damage
 };
