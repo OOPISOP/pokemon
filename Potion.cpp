@@ -3,7 +3,7 @@
   * Author: B11115016
   * Create Date: 2023/05/29
   * Editor: B11115016, B1115013
- * Update Date: 2023/06/
+ * Update Date: 2023/06/14
   * Description: This C++ program is to Test Pokemons' battle ability.
  ***********************************************************************/
  #include "Potion.h"
