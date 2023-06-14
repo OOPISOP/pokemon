@@ -63,7 +63,6 @@ int Move::calcDamage(Pokemon& user, const Pokemon& target, int moveType, bool te
 {
     if (!testMode)
     {
-        srand(time(NULL));
         int notCritical = rand() % 24;
         if (!notCritical)
         {
@@ -72,8 +71,6 @@ int Move::calcDamage(Pokemon& user, const Pokemon& target, int moveType, bool te
 
         int probability = ((int)ceil(100 / accuracy));
         int notHide = rand() % probability;
-        cout << probability << endl;
-        cout << notHide << endl;
 
         if (!notHide)
         {

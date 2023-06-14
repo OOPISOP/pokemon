@@ -9,9 +9,6 @@
 #pragma once
 #define TYPESIZE 18
 #include "EnumList.h"
-#include <cstdlib>
-#include <cmath>
-#include <ctime>
 #include <string>
 
 using namespace std;

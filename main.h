@@ -9,6 +9,9 @@
 #pragma once
 
 #include "DataFormat.h"
+#include <cstdlib>
+#include <cmath>
+#include <ctime>
 #include <iostream>
 
 using namespace std;

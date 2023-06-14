@@ -19,6 +19,8 @@
 */
 void runCommandLine()
 {
+    srand(time(NULL));
+
     Game game;
     string commandLine;
 
