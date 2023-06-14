@@ -41,7 +41,36 @@ ApplicationWindow
                     game.loadTestCase();
                 }
             }
+            Button
+            {
+                x:300
+                y:200
+                text:"Load PokemonData"
+                onClicked:
+                {
 
+                }
+            }
+            Button
+            {
+                x:300
+                y:100
+                text:"Load MoveData"
+                onClicked:
+                {
+
+                }
+            }
+            Button
+            {
+                x:300
+                y:400
+                text:"Load GameData"
+                onClicked:
+                {
+
+                }
+            }
         }
     }
     StackView
