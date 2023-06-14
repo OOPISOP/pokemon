@@ -112,7 +112,7 @@ string stateToString(int state)
 Pokemon::Pokemon()
 {
 }
-Pokemon::Pokemon(string name, vector<Attribute> types, double maxHP, double atk, double def, double spAtk, double spDef, double speed)
+Pokemon::Pokemon(string name, vector<Attribute> types, int maxHP, double atk, double def, double spAtk, double spDef, double speed)
 {   
     initStateList();
     this->name = name;
@@ -177,7 +177,7 @@ vector<Attribute> Pokemon::getTypes()const
  * Pre: hp
  * Pos: return Pokemon Hp
  */
-double Pokemon::getHp()const
+int Pokemon::getHp()const
 {
     return this->hp;
 }
@@ -186,7 +186,7 @@ double Pokemon::getHp()const
  * Pre: maxHP
  * Pos: return Pokemon Max HP
  */
-double Pokemon::getMaxHP()const
+int Pokemon::getMaxHP()const
 {
     return this->maxHP;
 }

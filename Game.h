@@ -20,6 +20,7 @@
 #include<QApplication>
 #include<QString>
 #include<QDebug>
+#include <QtMultimedia/qsoundeffect.h>
 
 using namespace std;
 
@@ -35,6 +36,11 @@ public:
     string outputFileName;      // For output.txt
     fstream outputFile;         // For output.txt
     stringstream output;        // For output stream
+    QSoundEffect effect;
+    QString loadSound = ":/music/Pallet_Town_Theme.wav";
+    int bagTimes = 0;
+    int pokemonTimes = 0;
+    int battleTimes = 0;
     //Game Constructor
     Game();
     //Game Destructor
@@ -54,7 +60,9 @@ public:
     Q_INVOKABLE bool loadGameData();
     void check();
     void status(int currentTurn);
-
+    Q_INVOKABLE bool checkAllDataLoaded();
+    Q_INVOKABLE QString getMoveName(int index);
+    Q_INVOKABLE QString getCurrentStatus(int index);
     /**
      * Intent: Execute command for QString
      * Pre:

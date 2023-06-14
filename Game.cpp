@@ -14,12 +14,21 @@
 #include <fstream>
 #include <QTemporaryFile>
 #include <filesystem>
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QSoundEffect>
 
 //Game Constructor
 
 Game::Game()
 {
     isTestMode = false;
+    this->effect.setVolume(1.f);
+    effect.setSource(QUrl::fromLocalFile(loadSound));
+    effect.setLoopCount(QSoundEffect::Infinite);
+    effect.play();
 }
 //Game Destructor
 Game::~Game()
@@ -87,20 +96,22 @@ bool Game::executeCommand(string command)
     //Error Proof
     try
     {
-        if(command == "Pokemon")
+        if(command == "Pokemon"||pokemonTimes)
         {
 //            swapPokemon();
         }
-        else if (command == "Bag")
+        else if (command == "Bag" || bagTimes)
         {
             cout<<"Bag"<<endl;
         }
-        else if(command == "Battle")
+        else if(command == "Battle" || battleTimes)
         {
-            string command2;
-            cin >> command2;
-
-            battle(command2, currentTurn, isTestMode);
+            if(battleTimes)
+            {
+                battle(command, currentTurn, isTestMode);
+            }
+            battleTimes++;
+            if(battleTimes == 3)battleTimes=0;
         }
         else if(command == "Check")
         {
@@ -135,9 +146,6 @@ void Game::battle(string command, bool currentTurn, bool testMode)
 {
     // Including first Pokemon damage calculation.
     useMove(command, currentTurn, isTestMode);
-    cin>>command;
-    // Including second Pokemon damage calculation.
-    useMove(command, !currentTurn, isTestMode);
 }
 
 // Intent:  To find input Pokemon's index.
@@ -593,4 +601,35 @@ void Game::status(int currentTurn)
         cout<<move.getName()<<" "<<move.getPP()<<" ";
     }
     cout<<endl;
+}
+
+bool Game::checkAllDataLoaded()
+{
+    if(!pokemons.empty()&&!moves.empty()&&!players.empty())
+    {
+        return true;
+    }
+    QDialog dialog;
+    QVBoxLayout layout(&dialog);
+    QLabel label(QString::fromStdString("please load data"),&dialog);
+    dialog.setFixedSize(100,100);
+    dialog.exec();
+    return false;
+}
+
+QString Game::getMoveName(int index)
+{
+    if(players.empty()||moves.empty()||pokemons.empty())return "No Data";
+    Pokemon* pokemon = &players[0].pokemons[players[0].currentPokemon];
+    cout<<pokemon->getMoves()[index].getName()<<endl;
+    return QString::fromStdString(pokemon->getMoves()[index].getName());
+}
+
+QString Game::getCurrentStatus(int index)
+{
+    if(players.empty()||moves.empty()||pokemons.empty())return "No Pokemon";
+     Pokemon* pokemon = &players[index].pokemons[players[index].currentPokemon];
+    string s = pokemon->getName() +" " + to_string(pokemon->getHp())+"/"+ to_string(pokemon->getMaxHP());
+    QString info = QString::fromStdString(s);
+    return info;
 }
