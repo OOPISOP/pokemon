@@ -22,6 +22,7 @@ Move::Move(string name, int attribute, int type, int power, int accuracy, int pp
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /**
  * Intent:get move name
  * Pos:return move name
@@ -79,6 +80,8 @@ int Move::calcDamage(const Pokemon& user,const Pokemon& target)
     int damage = (int)(0.44*power*(user.getAtk()/target.getDef())+2)*critical*stab*typeTime;//damage calc
     return damage;
 }
+=======
+>>>>>>> parent of 4d899eb (UPDATE for command (BAG, POKEMON, CHECK, RUN))
 =======
 >>>>>>> parent of 4d899eb (UPDATE for command (BAG, POKEMON, CHECK, RUN))
 =======

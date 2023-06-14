@@ -59,6 +59,7 @@ public:
     Move(string name, int attribute, int type, int power, int accuracy, int pp, bool isCon, int con);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     string getName()const;//get name
     void setCritical(float amount);//set critical
@@ -66,6 +67,8 @@ public:
     int getPP()const;
     void reducePP();//reduce pp
     int calcDamage(const Pokemon& user,const Pokemon& target);//calc damage
+=======
+>>>>>>> parent of 4d899eb (UPDATE for command (BAG, POKEMON, CHECK, RUN))
 =======
 >>>>>>> parent of 4d899eb (UPDATE for command (BAG, POKEMON, CHECK, RUN))
 =======
