@@ -419,6 +419,8 @@ void Pokemon::applyNegativeEffect()
  */
 bool Pokemon::useMove(Pokemon& target, int moveIndex, int turnNumber, bool turn, bool testMode)
 {
+    int damage;
+
     if(this->moves[moveIndex].getPP() <= 0)
     {
         cout<<"not enough pp"<<endl;
@@ -426,8 +428,6 @@ bool Pokemon::useMove(Pokemon& target, int moveIndex, int turnNumber, bool turn,
     }
     else
     {
-        int damage;
-
         if (moves[moveIndex].type == PHYSICAL)
         {
             damage = moves[moveIndex].calcDamage(*this,target, PHYSICAL, testMode, turnNumber);
@@ -440,56 +440,60 @@ bool Pokemon::useMove(Pokemon& target, int moveIndex, int turnNumber, bool turn,
         moves[moveIndex].reducePP();
     }
 
-    cout<<this->name<<" used "<<moves[moveIndex].getName()<<"!"<<endl;
-//    cout << "effect: "<<effectiveness << endl;
-
-    if(moves[moveIndex].getCon() >= 0)
+    if (moves[moveIndex].hideAttack == false)
     {
-        int con = moves[moveIndex].getCon();
-        if(con == POISON_STATE)
-        {
-            target.bePoisoned(turn, turnNumber);
-        }
-        else if(con == BURN_STATE)
-        {
-            target.beBurned(turn, turnNumber);
-        }
-        else if(con == PARALYSIS_STATE)
-        {
-            target.beParalysis(turn, turnNumber);
-        }
-    }
+        cout<<this->name<<" used "<<moves[moveIndex].getName()<<"!"<<endl;
+        //    cout << "effect: "<<effectiveness << endl;
 
-    if (moves[moveIndex].type != STATUS)
-    {
-        // Output additional effect message.
-        if (effectiveness >= 2)
+        if(moves[moveIndex].getCon() >= 0)
         {
-            cout << "[Turn " << turnNumber << "] ";
-            cout << "It's super effective!" << endl;
-        }
-        else if (effectiveness <= 0.5)
-        {
-            cout << "[Turn " << turnNumber << "] ";
-            cout << "It's not very effective..." << endl;
-        }
-        else if (effectiveness == 0)
-        {
-            if (moves[moveIndex].getCon() > 0)
+            int con = moves[moveIndex].getCon();
+            if(con == POISON_STATE)
             {
+                target.bePoisoned(turn, turnNumber);
             }
-            else
+            else if(con == BURN_STATE)
+            {
+                target.beBurned(turn, turnNumber);
+            }
+            else if(con == PARALYSIS_STATE)
+            {
+                target.beParalysis(turn, turnNumber);
+            }
+        }
+
+
+        if (moves[moveIndex].type != STATUS)
+        {
+            // Output additional effect message.
+            if (effectiveness >= 2)
             {
                 cout << "[Turn " << turnNumber << "] ";
-                cout << "It's not effective!" << endl;
+                cout << "It's super effective!" << endl;
+            }
+            else if (effectiveness <= 0.5)
+            {
+                cout << "[Turn " << turnNumber << "] ";
+                cout << "It's not very effective..." << endl;
+            }
+            else if (effectiveness == 0)
+            {
+                if (moves[moveIndex].getCon() > 0)
+                {
+                }
+                else
+                {
+                    cout << "[Turn " << turnNumber << "] ";
+                    cout << "It's not effective!" << endl;
+                }
             }
         }
-    }
 
-    if (moves[moveIndex].critical > 1)
-    {
-        cout << "[Turn " << turnNumber << "] ";
-        cout << "A critical hit!" << endl;
+        if (moves[moveIndex].critical > 1)
+        {
+            cout << "[Turn " << turnNumber << "] ";
+            cout << "A critical hit!" << endl;
+        }
     }
 
     return true;

@@ -61,8 +61,6 @@ void Move::reducePP()
  */
 int Move::calcDamage(Pokemon& user, const Pokemon& target, int moveType, bool testMode, int turnNum)
 {
-    bool hide = false;
-
     if (!testMode)
     {
         srand(time(NULL));
@@ -75,12 +73,12 @@ int Move::calcDamage(Pokemon& user, const Pokemon& target, int moveType, bool te
         int notHide = rand() % (int)(100 / accuracy);
         if (!notHide)
         {
-            hide = true;
+            hideAttack = true;
             critical = 1;
         }
     }
 
-    if (!hide)
+    if (!hideAttack)
     {
         float stab = 1;
         float typeTime = 1;
@@ -113,7 +111,6 @@ int Move::calcDamage(Pokemon& user, const Pokemon& target, int moveType, bool te
     }
     else
     {
-        cout << "[Turn " << turnNum << "] ";
         cout << target.getName() << " avoided the attack!" << endl;
 
         return 0;

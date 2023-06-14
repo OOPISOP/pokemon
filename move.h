@@ -58,6 +58,7 @@ public:
     int type;
     float critical = 1;
     int accuracy;
+    bool hideAttack = false;
 
     Move(string name, int attribute, int type, int power, int accuracy, int pp, bool isCon, int con);
 
