@@ -21,4 +21,6 @@ private:
 public:
     vector<Pokemon> pokemons;
     int currentPokemon;
+
+    void battle(bool crntTurn, bool );
 };
