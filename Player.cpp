@@ -7,8 +7,3 @@
  * Description: This C++ program is to Test Pokemons' battle ability.
 ***********************************************************************/
 #include "Player.h"
-
-void Player::battle(bool crrenntTurn, bool testMode)
-{
-
-}

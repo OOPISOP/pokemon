@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "EnumList.h"
 #include "Move.h"
+#include "Attack.h"
 #include <QObject>
 #include <string>
 #include <vector>
@@ -58,7 +59,7 @@ public:
     // Find input Pokemon's index.
     int findPokemon(bool turn, string pokemonName);
     // Check whether move exists and find index.
-    int findMove(const Pokemon &aPokemon, string moveName);
+    int findMove(Pokemon &aPokemon, string moveName);
     // Swap Pokemon.
     void swapPokemon(bool turn, string pokemon1, string pokemon2);
     // Use a potion in bag to a Pokemon.
@@ -66,5 +67,5 @@ public:
     // Use a move to the opponent Pokemon.
     void useMove(string moveName, bool turn, bool testMode);
     // Check Pokemon's faint status.
-    bool checkFaint(bool turn);
+    bool checkFainting(bool turn);
 };

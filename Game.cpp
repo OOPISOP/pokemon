@@ -156,7 +156,7 @@ int Game::findPokemon(bool turn, string pokemonName)
 // Intent:  To find input Pokemon's move index.
 // Pre:     aPokemon's move must have been initialised.
 // Post:    The function returns index if found, otherwise returns -1.
-int Game::findMove(const Pokemon &aPokemon, string moveName)
+int Game::findMove(Pokemon &aPokemon, string moveName)
 {
     for (int i = 0; i < aPokemon.getMoves().size(); i++)
     {
@@ -215,5 +215,5 @@ void Game::useMove(string moveName, bool turn, bool testMode)
 // Post:    The function returns true if the Pokemon is fainted.
 bool Game::checkFainting(bool turn)
 {
-    return (players[turn].pokemons[currentPokemon].getHp() <= 0);
+    return (players[turn].pokemons[players[turn].currentPokemon].getHp() <= 0);
 }
