@@ -97,7 +97,7 @@ bool Game::executeCommand(string command)
             string command2;
             cin >> command2;
 
-            battle(command, command2, currentTurn, isTestMode);
+            battle(command2, currentTurn, isTestMode);
         }
         else if(command == "Check")
         {
@@ -128,12 +128,13 @@ bool Game::executeCommand(string command)
 // Intent:  To mange one turn of battle process.
 // Pre:     None.
 // Post:    The function executed a turn.
-void Game::battle(string command1, string command2, bool currentTurn, bool testMode)
+void Game::battle(string command, bool currentTurn, bool testMode)
 {
     // Including first Pokemon damage calculation.
-    useMove(command1, currentTurn, isTestMode);
+    useMove(command, currentTurn, isTestMode);
+    cin>>command;
     // Including second Pokemon damage calculation.
-    useMove(command2, !currentTurn, isTestMode);
+    useMove(command, !currentTurn, isTestMode);
 }
 
 // Intent:  To find input Pokemon's index.
@@ -194,11 +195,10 @@ void Game::swapPokemon(bool turn, string pokemon1, string pokemon2)
 // Post:    d
 void Game::useMove(string moveName, bool turn, bool testMode)
 {
-    Pokemon &attackPokemon = players[turn].pokemons[players[turn].currentPokemon];
-    Pokemon &defendPokemon = players[!turn].pokemons[players[!turn].currentPokemon];
-    int moveIndex = findMove(attackPokemon, moveName);
-
-    attackPokemon.useMove(defendPokemon, moveIndex);
+    Pokemon *attackPokemon = &players[turn].pokemons[players[turn].currentPokemon];
+    Pokemon *defendPokemon = &players[!turn].pokemons[players[!turn].currentPokemon];
+    int moveIndex = findMove(*attackPokemon, moveName);
+    attackPokemon->useMove(*defendPokemon, moveIndex);
 }
 
 // Intent:  To check Pokemon's faint status.
@@ -475,6 +475,7 @@ void Game::check()
             cout<<stateToString(state);
         }
     }
+    cout<<" ";
     cout<<pokemonTwo->getName()<<" "<<pokemonTwo->getHp()<<" ";
     for(const auto state: pokemonTwo->getStateList())
     {

@@ -63,7 +63,7 @@ public:
 
 
     // Mange one turn of battle process.
-    void battle(string command1, string command2, bool currentTurn, bool testMode);
+    void battle(string command, bool currentTurn, bool testMode);
     // Find input Pokemon's index.
     int findPokemon(bool turn, string pokemonName);
     // Check whether move exists and find index.
