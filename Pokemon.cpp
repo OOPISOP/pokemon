@@ -255,7 +255,7 @@ void Pokemon::bePoisoned()
 void Pokemon::beParalysis()
 {
     this->stateList[State::PARALYSIS_STATE] = true;
-     cout<<"<"<<this->name<<"> is paralyzed, so it may be unable to move!"<<endl;
+    cout<<"<"<<this->name<<"> is paralyzed, so it may be unable to move!"<<endl;
     
 }
 //set Pokemon burned

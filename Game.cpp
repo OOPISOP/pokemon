@@ -38,7 +38,6 @@ bool Game::executeCommand(QString command)
     string stdString = command.toStdString();
     if(executeCommand(stdString))
     {
-        cout << "[" << turnNumber << "] ";
         return true;
     }
     std::cout<<"failed"<<endl;
@@ -229,6 +228,7 @@ void Game::swapPokemon(bool turn)
             string gameResult;
             gameResult = (winOrLose) ? "You win" : "You lose";
 
+            cout << "[" << turnNumber << "] ";
             cout << gameResult << endl;
         }
     }
@@ -251,6 +251,7 @@ void Game::swapPokemon(bool turn)
             string gameResult;
             gameResult = (winOrLose) ? "You win" : "You lose";
 
+            cout << "[" << turnNumber << "] ";
             cout << gameResult << endl;
         }
         else
@@ -286,8 +287,11 @@ void Game::swapPokemon(bool turn)
                         players[turn].currentPokemon = i;
                         if (turn == PLAYER_TURN)
                         {
-                            cout << pokemonTempName << ", switch out!" << endl;
+                            cout << "[" << turnNumber << "] ";
+                            cout << pokemonTempName << ", switch out!" << endl;                            
+                            cout << "[" << turnNumber << "] ";
                             cout << "Come back!" << endl;
+                            cout << "[" << turnNumber << "] ";
                             cout << "Go! " << players[turn].pokemons[i].getName() << "!" << endl;
                         }
                         found = true;
@@ -686,6 +690,7 @@ bool Game::loadTestCase()
 void Game::check()
 {
     Pokemon* pokemon = &players[currentTurn].pokemons[players[currentTurn].currentPokemon];
+    cout << "[" << turnNumber << "] ";
     for(const auto& move : pokemon->getMoves())
     {
         cout<<move.getName()<<" "<<move.getPP()<<" ";
@@ -705,6 +710,7 @@ void Game::status(int currentTurn)
     }
     pokemonOne = &players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon];
     pokemonTwo = &players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon];
+    cout << "[" << turnNumber << "] ";
     cout<<pokemonOne->getName()<<" "<<pokemonOne->getHp()<<" ";
     for(const auto state: pokemonOne->getStateList())
     {
