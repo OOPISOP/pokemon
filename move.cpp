@@ -70,7 +70,11 @@ int Move::calcDamage(Pokemon& user, const Pokemon& target, int moveType, bool te
             critical = 2;
         }
 
-        int notHide = rand() % (int)(100 / accuracy);
+        int probability = ((int)ceil(100 / accuracy));
+        int notHide = rand() % probability;
+        cout << probability << endl;
+        cout << notHide << endl;
+
         if (!notHide)
         {
             hideAttack = true;
