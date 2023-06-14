@@ -36,18 +36,21 @@ bool Game::executeCommand(QString command)
     string stdString = command.toStdString();
     if(executeCommand(stdString))
     {
+        std::cout<<"true"<<endl;
         return true;
     }
+    std::cout<<"failed"<<endl;
     return false;
 }
 
 /**
  * Intent: Execute command
  * Pre:
- * Pos:return true or false 
+ * Pos:return true or false
  */
 bool Game::executeCommand(string command)
 {
+    cout<<command<<endl;
     if(command == "TestCase")
     {
         stringstream commandStream(command);
@@ -90,7 +93,7 @@ bool Game::executeCommand(string command)
         }
         else if (command == "Bag")
         {
-
+            cout<<"Bag"<<endl;
         }
         else if(command == "Battle")
         {
@@ -121,7 +124,7 @@ bool Game::executeCommand(string command)
         cout << "Failed" << endl;
         return false;
     }
-    
+
     return true;
 }
 
@@ -425,6 +428,98 @@ bool Game::loadTestCase(string fileName)
     {
         executeCommand(line);
     }
+    return true;
+}
+
+/**
+ * @brief Game::loadTestCase
+ * @param fileName
+ * @return
+ */
+bool Game::loadPokemonData()
+{
+    try
+    {
+        QString filePath = QFileDialog::getOpenFileName(
+            nullptr,
+            "選擇文件",
+            QDir::homePath(),
+            "文本文件 (*.txt);;所有文件 (*)"
+            );
+
+        if (!filePath.isEmpty()) {
+            std::cout << "選擇的文件路徑" << filePath.toStdString()<<endl;
+        } else {
+            std::cout << "為選擇任何文件"<<endl;
+        }
+        DataFormat data;
+        data.loadPokemonData(filePath.toStdString(),this);
+    }
+    catch (const int error_code)
+    {
+        cout<<error_code<<endl;
+    }
+    return true;
+}
+/**
+ * @brief Game::loadTestCase
+ * @param fileName
+ * @return
+ */
+bool Game::loadMoveData()
+{
+    try
+    {
+        QString filePath = QFileDialog::getOpenFileName(
+            nullptr,
+            "選擇文件",
+            QDir::homePath(),
+            "文本文件 (*.txt);;所有文件 (*)"
+            );
+
+        if (!filePath.isEmpty()) {
+            std::cout << "選擇的文件路徑" << filePath.toStdString()<<endl;
+        } else {
+            std::cout << "為選擇任何文件"<<endl;
+        }
+        DataFormat data;
+        data.loadMoveData(filePath.toStdString(),this);
+    }
+    catch (const int error_code)
+    {
+        cout<<error_code<<endl;
+    }
+    return true;
+}
+/**
+ * @brief Game::loadTestCase
+ * @param fileName
+ * @return
+ */
+bool Game::loadGameData()
+{
+    try
+    {
+        QString filePath = QFileDialog::getOpenFileName(
+            nullptr,
+            "選擇文件",
+            QDir::homePath(),
+            "文本文件 (*.txt);;所有文件 (*)"
+            );
+
+        if (!filePath.isEmpty()) {
+            qDebug() << "選擇的文件路徑" << filePath;
+        } else {
+            qDebug() << "為選擇任何文件";
+        }
+        DataFormat data;
+        data.loadGameData(filePath.toStdString(),this);
+    }
+    catch (const int error_code)
+    {
+        cout<<error_code<<endl;
+    }
+    return true;
 }
 /**
  * @brief Game::loadTestCase
@@ -452,6 +547,7 @@ bool Game::loadTestCase()
     {
         cout<<error_code<<endl;
     }
+    return true;
 }
 
 /**

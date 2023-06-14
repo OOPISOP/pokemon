@@ -10,8 +10,6 @@
 
 #include "Player.h"
 #include "Move.h"
-#include "Attack.h"
-#include "QtWidgets/qwidget.h"
 #include <QObject>
 #include <string>
 #include <vector>
@@ -45,12 +43,15 @@ public:
     /**
      * Intent: Execute command
      * Pre:
-     * Pos:return true or false 
+     * Pos:return true or false
      */
     bool executeCommand(string command);
     bool useBag();
-    bool loadTestCase();
+    Q_INVOKABLE bool loadTestCase();
     bool loadTestCase(string fileName);
+    Q_INVOKABLE bool loadPokemonData();
+    Q_INVOKABLE bool loadMoveData();
+    Q_INVOKABLE bool loadGameData();
     void check();
     void status(int currentTurn);
 
