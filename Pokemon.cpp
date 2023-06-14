@@ -409,7 +409,6 @@ void Pokemon::applyNegativeEffect()
     }
     else if(isBurned())
     {
-        cout<<"<"<<this->name<<"> is hurt by its burn!"<<endl;
         receiveDamage(effectDamage());
     }
 }

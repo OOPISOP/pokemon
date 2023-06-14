@@ -338,11 +338,13 @@ void Game::bAndP()
     if (attackPokemon->isBurned())
     {
         cout << "[Turn " << turnNumber << "] ";
+        attackPokemon->applyNegativeEffect();
         cout << attackPokemon->getName() << " is hurt by its burn!" << endl;
     }
     if (attackPokemon->isPoisoned())
     {
         cout << "[Turn " << turnNumber << "] ";
+        attackPokemon->applyNegativeEffect();
         cout << attackPokemon->getName() << " is hurt by its poisoning!" << endl;
     }
     // Check Fainting
@@ -358,18 +360,21 @@ void Game::bAndP()
     {
         cout << "[Turn " << turnNumber << "] ";
         cout << "The opposing ";
+        defendPokemon->applyNegativeEffect();
         cout << defendPokemon->getName() << " is hurt by its burn!" << endl;
     }
     if (defendPokemon->isPoisoned())
     {
         cout << "[Turn " << turnNumber << "] ";
         cout << "The opposing ";
+        defendPokemon->applyNegativeEffect();
         cout << defendPokemon->getName() << " is hurt by its poisoning!" << endl;
     }
     // Check Fainting
     if (defendPokemon->getHp() <= 0)
     {
         cout << "[Turn " << turnNumber << "] ";
+        defendPokemon->applyNegativeEffect();
         cout << "The opposing " << defendPokemon->getName() << " fainted!" << endl;
         swapPokemon(OPPONENT_TURN);
     }
