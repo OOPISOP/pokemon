@@ -3,25 +3,27 @@
  * Author: B11115016
  * Create Date: 2023/05/29
  * Editor: B11115016,B11115033
- * Update Date: 2023/05/29
+ * Update Date: 2023/06/14
  * Description:  Load Pokemon data from file , Pokemon data , Move data , Game data , Test Case format
 ***********************************************************************/
 #include "DataFormat.h"
+#include <sstream>
 
 /**
  * Intent:Load Pokemon data from file
  * Pre:Pokemon data file name
  * Pos:return pokemons
  */
-void DataFormat::loadPokemonData(string fileName, Game *game)
+bool DataFormat::loadPokemonData(string fileName, Game *game)
 {
     ifstream pokemonData(fileName);
     //Error Proof
      if(!pokemonData.is_open())
      {
         cout<<fileName<<" Can't Open"<<endl;
-        return;
+        return false;
      }
+     game->pokemons.clear();
     string line;
     while(getline(pokemonData,line)) // venusaur
     {
@@ -68,12 +70,13 @@ void DataFormat::loadPokemonData(string fileName, Game *game)
         //Add Pokemon
         game->pokemons.push_back(pokemon);
     }
+    return true;
 }
 
 // Intent:  Load move data from file.
 // Pre:     Move data file name.
 // Post:    Print failed if file cannot be opened.
-void DataFormat::loadMoveData(string fileName, Game *game)
+bool DataFormat::loadMoveData(string fileName, Game *game)
 {
     ifstream moveDataFile(fileName);
 
@@ -81,91 +84,88 @@ void DataFormat::loadMoveData(string fileName, Game *game)
     if(!moveDataFile.is_open())
     {
         cout<<fileName<<" Cannot be opened"<<endl;
-        return;
+        return false;
     }
-
-    string name;
-    while(moveDataFile >> name)
+    game->moves.clear();
+    string name,line,attributeString,typeString;
+    int attribute,type,power,accuracy,pp,isCon;
+    int con = -1;
+    string buffer;
+    while(getline(moveDataFile,line))
     {
-        int attribute;
-        int type;
-        int power;
-        int accuracy;
-        int pp;
-        bool isCon;
-        int con = -1;
-        string buffer;
-
-        moveDataFile >> attribute;
-        moveDataFile >> type;
-        moveDataFile >> power;
-        moveDataFile >> accuracy;
-        moveDataFile >> pp;
-        moveDataFile >> buffer;
-
-        if (buffer != "\n")
+        stringstream commandLine(line);
+        if(!(commandLine>>name>>attributeString>>typeString>>power>>accuracy>>pp))
+        {
+            cout<<"command not complete"<<endl;
+            return false;
+        }
+        if(commandLine>>buffer)
         {
             isCon = true;
-            if (buffer == "PAR")
+            if(buffer == "PAR")
             {
                 con = PARALYSIS_STATE;
             }
-            else if (buffer == "BRN")
+            else if(buffer == "BRN")
             {
                 con = BURN_STATE;
             }
-            else if (buffer == "PSN")
+            else if(buffer == "PSN")
             {
                 con = POISON_STATE;
             }
+            else
+            {
+                isCon = false;
+                cout<<"unknown command"<<endl;
+            }
         }
-        else
-        {
-            isCon = false;
-        }
-
+        attribute = stringToType(attributeString);
+        type = stringToType(typeString);
         // Add a move to the library.
         Move aMove(name, attribute, type, power, accuracy, pp, isCon, con);
         game->moves.push_back(aMove);
-
-        // Next line.
-        moveDataFile.ignore();
     }
+    return true;
 }
 
 // Intent:  Load Game data from file.
 // Pre:     Game data file name.
 // Post:    Print failed if file cannot be opened.
-void DataFormat::loadGameData(string fileName, Game *game)
+bool DataFormat::loadGameData(string fileName, Game *game)
 {
     ifstream gameDataFile(fileName);
-
     //Error Proof
     if(!gameDataFile.is_open())
     {
         cout<<fileName<<" Cannot be opened"<<endl;
-        return;
+        return false;
     }
-
+    game->players.clear();
     // Initialise Players in the game.
     for (int i = 0; i < 2; i++)
     {
         Player aPlayer;
         aPlayer.currentPokemon = 0;
-
         int pokemonNumber;
-        gameDataFile >> pokemonNumber;
+        if(!(gameDataFile >> pokemonNumber))
+        {
+            cout<<"No pokemon"<<endl;
+            return false;
+        }
         gameDataFile.ignore();
-
         // Initialise Pokemon.
         for (int j = 0; j < pokemonNumber; j++)
         {
-            Pokemon aPokemon;
+            Pokemon* aPokemon;
             string pokemonName;
             int moveNumber;
             string moveName;
-
-            gameDataFile >> pokemonName >> moveNumber;
+            if(!(gameDataFile >> pokemonName >> moveNumber))
+            {
+                cout<<"command no complete"<<endl;
+                return false;
+            }
             gameDataFile.ignore();
 
             // Find Pokemon in library.
@@ -173,31 +173,35 @@ void DataFormat::loadGameData(string fileName, Game *game)
             {
                 if (game->pokemons[l].getName() == pokemonName)
                 {
-                    aPokemon = game->pokemons[l];
+                    aPokemon = &game->pokemons[l];
+                    break;
                 }
             }
-
+            vector<Move> moves;
             // Add Moves.
             for (int k = 0; k < moveNumber; k++)
             {
-                gameDataFile >> moveName;
-
+                if(!( gameDataFile >> moveName))
+                {
+                     cout<<"command no complete"<<endl;
+                    return false;
+                }
                 // Find Move in library.
                 for (int m = 0; m < game->moves.size(); m++)
                 {
                     if (game->moves[m].getName() == moveName)
                     {
-                        aPokemon.getMoves().push_back(game->moves[m]);
+                        moves.push_back(game->moves[m]);
+                        break;
                     }
                 }
             }
+            aPokemon->setMoves(moves);
+            aPlayer.pokemons.push_back((*aPokemon));
             gameDataFile.ignore();
         }
-
         // Add Player.
         game->players.push_back(aPlayer);
-
-        // Skip to next line and read new Player.
-        gameDataFile.ignore();
     }
+    return true;
 }

@@ -3,19 +3,20 @@
  * Author: B11115016
  * Create Date: 2023/05/29
  * Editor: B11115016,B11115033
- * Update Date: 2023/05/29
+ * Update Date: 2023/06/14
  * Description: This C++ program is Pokemon Game Manager
 ***********************************************************************/
 #pragma once
 
 #include "Player.h"
-#include "EnumList.h"
 #include "Move.h"
 #include "Attack.h"
+#include "QtWidgets/qwidget.h"
 #include <QObject>
 #include <string>
 #include <vector>
 #include <sstream>
+#include <fstream>
 #include <iostream>
 #include<QObject>
 #include<QApplication>
@@ -33,7 +34,9 @@ public:
     vector<Player> players;
     vector<Pokemon> pokemons;   // Library of Pokemons
     vector<Move> moves;         // Library of Pokemon Move
-    stringstream output;        // For output.txt
+    string outputFileName;      // For output.txt
+    fstream outputFile;         // For output.txt
+    stringstream output;        // For output stream
     //Game Constructor
     Game();
     //Game Destructor
@@ -45,6 +48,11 @@ public:
      * Pos:return true or false 
      */
     bool executeCommand(string command);
+    bool useBag();
+    bool loadTestCase();
+    bool loadTestCase(string fileName);
+    void check();
+    void status(int currentTurn);
 
     /**
      * Intent: Execute command for QString
@@ -69,3 +77,6 @@ public:
     // Check Pokemon's faint status.
     bool checkFainting(bool turn);
 };
+
+
+
