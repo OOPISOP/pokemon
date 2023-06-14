@@ -59,39 +59,64 @@ void Move::reducePP()
  * @param target
  * @return move damage
  */
-int Move::calcDamage(Pokemon& user,const Pokemon& target, int moveType)
+int Move::calcDamage(Pokemon& user, const Pokemon& target, int moveType, bool testMode, int turnNum)
 {
-    float stab = 1;
-    float typeTime = 1;
-    for(const auto& userType : user.getTypes())//if user type equal to move type stab = 1.5,otherwise = 1
+    bool hide = false;
+
+    if (!testMode)
     {
-        if(type == userType)
+        srand(time(NULL));
+        int notCritical = rand() % 24;
+        if (!notCritical)
         {
-            stab = 1.5;
-            break;
+            critical = 2;
+        }
+
+        int notHide = rand() % (int)(100 / accuracy);
+        if (!notHide)
+        {
+            hide = true;
+            critical = 1;
         }
     }
-    for(const auto&  time : target.getTypes())//type times calc
+
+    if (!hide)
     {
-        typeTime *= TYPE_EFFECT[type][time];
+        float stab = 1;
+        float typeTime = 1;
+        for(const auto& userType : user.getTypes())//if user type equal to move type stab = 1.5,otherwise = 1
+        {
+            if(attribute == userType)
+            {
+                stab = 1.5;
+                break;
+            }
+        }
+
+        for(int time = 0; time < target.getTypes().size(); time++)//type times calc
+        {
+            typeTime = typeTime * TYPE_EFFECT[attribute][target.getTypes()[time]];
+        }
+        user.effectiveness = typeTime;
+
+        int damage;
+        if (moveType == PHYSICAL)
+        {
+            damage = (int)(0.44*power*(user.getAtk()/target.getDef())+2)*critical*stab*typeTime;//damage calc
+        }
+        else if (moveType == SPECIAL)
+        {
+            damage = (int)(0.44*power*(user.getSpAtk()/target.getSpDef())+2)*critical*stab*typeTime;//damage calc
+        }
+
+        return damage;
     }
-
-    user.effectiveness = typeTime;
-    cout << type << endl;
-    cout << time << endl;
-    cout << user.effectiveness << endl;
-
-
-    int damage;
-    if (moveType == PHYSICAL)
+    else
     {
-        damage = (int)(0.44*power*(user.getAtk()/target.getDef())+2)*critical*stab*typeTime;//damage calc
-    }
-    else if (moveType == SPECIAL)
-    {
-        damage = (int)(0.44*power*(user.getSpAtk()/target.getSpDef())+2)*critical*stab*typeTime;//damage calc
-    }
+        cout << "[Turn " << turnNum << "] ";
+        cout << target.getName() << " avoided the attack!" << endl;
 
-    return damage;
+        return 0;
+    }
 }
 

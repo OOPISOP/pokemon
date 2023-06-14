@@ -9,6 +9,8 @@
 #pragma once
 #define TYPESIZE 18
 #include "EnumList.h"
+#include <cstdlib>
+#include <ctime>
 #include <string>
 
 using namespace std;
@@ -49,13 +51,13 @@ private:
     string name;
     int attribute;
     int power;
-    int accuracy;
     int pp;
     bool isCon;
     int con;
-    float critical = 1;
 public:
     int type;
+    float critical = 1;
+    int accuracy;
 
     Move(string name, int attribute, int type, int power, int accuracy, int pp, bool isCon, int con);
 
@@ -64,5 +66,5 @@ public:
     int getCon()const;//get con
     int getPP()const;
     void reducePP();//reduce pp
-    int calcDamage(Pokemon &user, const Pokemon& target, int moveType);//calc damage
+    int calcDamage(Pokemon &user, const Pokemon& target, int moveType, bool testMode, int turnNum);//calc damage
 };

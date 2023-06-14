@@ -63,12 +63,13 @@ public:
     Q_INVOKABLE bool loadPokemonData();//load pokemon data
     Q_INVOKABLE bool loadMoveData();//load move data
     Q_INVOKABLE bool loadGameData();//load game data
-    void check();//check command
-    void status(int currentTurn);//status command
+    void check(bool turn);//check command
+    void status();//status command
     Q_INVOKABLE bool checkAllDataLoaded();//check all data is loaded
     Q_INVOKABLE QString getMoveName(int index);//get move name
     Q_INVOKABLE QString getCurrentStatus(int index);//get current status
     Q_INVOKABLE void randomMove();
+
 
     /**
      * Intent: Execute command for QString

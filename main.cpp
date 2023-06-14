@@ -23,7 +23,7 @@ void runCommandLine()
     string commandLine;
 
     // Tell a short background story about Pokemon.
-    game.tellStory();
+   // game.tellStory();
     // Read commands.
     while(getline(cin,commandLine))
     {
@@ -59,8 +59,7 @@ int main(int argc, char* argv[])
 
     if(argc == 1)
     {
-        runCommandLine();
-       //return runGUI(argc,argv);
+       return runGUI(argc,argv);
     }
     else if (string(argv[1]) == string("CommandInput") && argc == 2)
     {

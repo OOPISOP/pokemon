@@ -18,18 +18,17 @@ bool DataFormat::loadPokemonData(string fileName, Game *game)
 {
     ifstream pokemonData(fileName);
     //Error Proof
-     if(!pokemonData.is_open())
-     {
+    if(!pokemonData.is_open())
+    {
         cout<<fileName<<" Can't Open"<<endl;
         return false;
-     }
-     game->pokemons.clear();
+    }
+    game->pokemons.clear();
+
     string line;
     while(getline(pokemonData,line)) // venusaur
     {
         // reading inputs:
-        vector<string>lines;//data lines
-
         string firstLine = line;//record first line
         
         getline(pokemonData,line); // 2 grass poison
@@ -37,10 +36,8 @@ bool DataFormat::loadPokemonData(string fileName, Game *game)
 
         getline(pokemonData, line); // 187 147 148 167 167 145
         string thirdLine = line;// record third line
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////
         
         // stored:
-
         string part;
         vector<string> parts;
         int typeN;//type N
@@ -49,18 +46,14 @@ bool DataFormat::loadPokemonData(string fileName, Game *game)
         stringstream second(secondLine);
         stringstream third(thirdLine);
 
-        while(getline(second,part,' '))//get all parts of second line
-        {
-            parts.push_back(part); // 2 grass poin
-        }
-
-        typeN = parts.size();//get type N // 3
+        second >> typeN;
 
         for(int i=0;i<typeN;i++)//set type
         {
-            pokemonTypes.push_back(stringToType(parts[i]));
+            second >> part;
+            pokemonTypes.push_back(stringToType(part));
         }
-        parts.clear();
+
         while(getline(third,part,' '))//get all parts of second line
         {
             parts.push_back(part); // 
@@ -89,19 +82,23 @@ bool DataFormat::loadMoveData(string fileName, Game *game)
     game->moves.clear();
 
     string name,attributeString,typeString;
-    int attribute,type,power,accuracy,pp,isCon;
+    int attribute,type,power,accuracy,pp;
+    bool isCon;
     string buffer, line;
 
     while(getline(moveDataFile,line))
     {
         int con = -1;
+        buffer = "-1";
         stringstream commandLine(line);
         if(!(commandLine>>name>>attributeString>>typeString>>power>>accuracy>>pp))
         {
             cout<<"command not complete"<<endl;
             return false;
         }
-        if(commandLine>>buffer)
+        isCon = false;
+        commandLine >> buffer;
+        if(buffer != "-1")
         {
             isCon = true;
             if(buffer == "PAR")

@@ -62,7 +62,6 @@ bool Game::executeCommand(QString command)
  */
 bool Game::executeCommand(string command)
 {
-    cout<<command<<endl;
     if(command == "TestCase")
     {
         stringstream commandStream(command);
@@ -137,26 +136,22 @@ bool Game::executeCommand(string command)
                 emit updatePokemonInfo();
                 turnNumber++;
             }
+            // B & P.
+            bAndP();
+
+            turnNumber++;
         }
         else if (command == "Bag" || bagTimes)
         {
             // Use potion.
-            if(bagTimes==0)
-            {
-                 useBag();
-            }
-            else if(bagTimes == 1)
-            {
-
-            }
             useBag();
 
-            bagTimes++;
             // Attack from second players.
-            if(useMove(command, !currentTurn, isTestMode))
-            {
-                return false;
-            }
+            string command2;
+            cin >> command2;
+            battle(command2, !currentTurn, isTestMode);
+            // B & P.
+            bAndP();
 
             turnNumber++;
         }
@@ -193,11 +188,11 @@ bool Game::executeCommand(string command)
         }
         else if(command == "Check")
         {
-            check();
+            check(PLAYER_TURN);
         }
         else if(command == "Status")
         {
-            status(currentTurn);
+            status();
         }
         else if(command == "Run")
         {
@@ -347,43 +342,35 @@ void Game::swapPokemon(bool turn,string command)
     {
 
             if (command == "exit")
+            string command;
+            cin >> command;
+            bool found = false;
+            for (int i = 0; i < players[turn].pokemons.size(); i++)
             {
-                // go back to the main menu
-                return;
-            }
-            else
-            {
-                bool found = false;
-                for (int i = 0; i < players[turn].pokemons.size(); i++)
+                string pokemonTempName = players[turn].pokemons[i].getName();
+                if (command == pokemonTempName)
                 {
-                    string pokemonTempName = players[turn].pokemons[i].getName();
-                    if (command == pokemonTempName)
+                    if (turn == PLAYER_TURN)
                     {
+                        cout << "[Turn " << turnNumber << "] ";
+                        cout << players[turn].pokemons[players[turn].currentPokemon].getName() << ", switch out!" << endl;
+                        cout << "[Turn " << turnNumber << "] ";
+                        cout << "Come back!" << endl;
                         players[turn].currentPokemon = i;
-                        if (turn == PLAYER_TURN)
-                        {
-                           cout << "[Turn " << turnNumber << "] ";
-                            cout << pokemonTempName << ", switch out!" << endl;                            
-                           cout << "[Turn " << turnNumber << "] ";
-                            cout << "Come back!" << endl;
-                           cout << "[Turn " << turnNumber << "] ";
-                            cout << "Go! " << players[turn].pokemons[i].getName() << "!" << endl;
-                        }
-                        found = true;
-
-                        break;
+                        cout << "[Turn " << turnNumber << "] ";
+                        cout << "Go! " << players[turn].pokemons[i].getName() << "!" << endl;
                     }
-                }
-
+                    found = true;
+                            }
                 if(!found)
                 {
                     cout << "Invalid input pokemon to swap." << endl;
                     swapPokemon(turn,"");
+                    break;
                 }
             }
     }
 }
-
 // Intent:  To use a move to the opponent Pokemon.
 // Pre:     Player's pokemons must have been initialised.
 // Post:    The function used move.
@@ -408,7 +395,7 @@ bool Game::useMove(string moveName, bool turn, bool testMode)
         cout<<"No move"<<endl;
         return false;
     }
-    attackPokemon->useMove(*defendPokemon, moveIndex, turnNumber);
+     attackPokemon->useMove(*defendPokemon, moveIndex, turnNumber, turn, testMode);
 
     // Output messege.
     if (defendPokemon->isBurned())
@@ -460,76 +447,55 @@ void Game::bAndP()
     Pokemon *attackPokemon = &players[currentTurn].pokemons[players[currentTurn].currentPokemon];
     if (attackPokemon->isBurned())
     {
-       cout << "[Turn " << turnNumber << "] ";
-        cout<<"The opposing ";
-       attackPokemon->applyNegativeEffect();
-        cout << "<" << attackPokemon->getName() << ">";
-        cout << " is hurt by its burn!" << endl;
+        cout << "[Turn " << turnNumber << "] ";
+        attackPokemon->applyNegativeEffect();
+        cout << attackPokemon->getName() << " is hurt by its burn!" << endl;
     }
     if (attackPokemon->isPoisoned())
     {
-       cout << "[Turn " << turnNumber << "] ";
-        cout<<"The opposing ";
+        cout << "[Turn " << turnNumber << "] ";
         attackPokemon->applyNegativeEffect();
-        cout << "<" << attackPokemon->getName() << ">";
-        cout << " is hurt by its poisoning!" << endl;
+        cout << attackPokemon->getName() << " is hurt by its poisoning!" << endl;
     }
     // Check Fainting
     if (attackPokemon->getHp() <= 0)
     {
-       cout << "[Turn " << turnNumber << "] ";
-        if (currentTurn == OPPONENT_TURN)
-        {
-            cout << "The opposing " << attackPokemon->getName() << " fainted!" << endl;
-            swapPokemon(OPPONENT_TURN,"");
-            pokemonTimes = 1;
-            flag = true;
-        }
-        else
-        {
-            swapPokemon(PLAYER_TURN,"");
-            pokemonTimes = 1;
-            flag = true;
-            cout << attackPokemon->getName() << " fainted!" << endl;
-        }
+        cout << "[Turn " << turnNumber << "] ";
+        cout << attackPokemon->getName() << " fainted!" << endl;
+        swapPokemon(PLAYER_TURN,"");
+        pokemonTimes = 1;
+        flag = true;
     }
+
     Pokemon *defendPokemon = &players[!currentTurn].pokemons[players[!currentTurn].currentPokemon];
     if (defendPokemon->isBurned())
     {
-       cout << "[Turn " << turnNumber << "] ";
-        cout<<"The opposing ";
+        cout << "[Turn " << turnNumber << "] ";
+        cout << "The opposing ";
         defendPokemon->applyNegativeEffect();
-        cout << "<" << defendPokemon->getName() << ">";
-        cout << " is hurt by its burn!" << endl;
+        cout << defendPokemon->getName() << " is hurt by its burn!" << endl;
     }
     if (defendPokemon->isPoisoned())
     {
-       cout << "[Turn " << turnNumber << "] ";
-        cout<<"The opposing ";
+        cout << "[Turn " << turnNumber << "] ";
+        cout << "The opposing ";
         defendPokemon->applyNegativeEffect();
-        cout << "<" << defendPokemon->getName() << ">";
-        cout << " is hurt by its poisoning!" << endl;
+        cout << defendPokemon->getName() << " is hurt by its poisoning!" << endl;
     }
     // Check Fainting
     if (defendPokemon->getHp() <= 0)
     {
-       cout << "[Turn " << turnNumber << "] ";
-        if (currentTurn == OPPONENT_TURN)
-        {
-            cout << "The opposing " << defendPokemon->getName() << " fainted!" << endl;
-            swapPokemon(OPPONENT_TURN,"");
-            pokemonTimes = 1;
-            flag = true;
-        }
-        else
-        {
-            swapPokemon(PLAYER_TURN,"");
-            pokemonTimes = 1;
-            flag = true;
-            cout << defendPokemon->getName() << " fainted!" << endl;
-        }
+        cout << "[Turn " << turnNumber << "] ";
+        defendPokemon->applyNegativeEffect();
+        cout << "The opposing " << defendPokemon->getName() << " fainted!" << endl;
+        swapPokemon(OPPONENT_TURN,"");
+        pokemonTimes = 1;
+        flag = true;
     }
 }
+
+
+
 
 // Intent:  To check Pokemon's faint status.
 // Pre:     Player's Pokemons must have been initialised.
@@ -541,201 +507,73 @@ bool Game::checkFainting(bool turn)
 
 bool Game::useBag()
 {
-
-    Pokemon& currPokemon = players[0].getPokemon();
+    string potionInput;
+    getline(cin, potionInput);
+    string healPokemon;
+    cin >> healPokemon;
 
     if (potionInput == "Potion")
     {
-        cout << "Choose pokemon to used the potion : ";
-
         for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
         {
-            cout << players[currentTurn].pokemons[i].getName() << " ";
-        }
-        cout << endl;
-
-        string healPokemon;
-        cin >> healPokemon;
-
-        if (healPokemon == "Exit")
-        {
-            // go back to the main menu
-            return false;
-        }
-        else
-        {
-            bool found = false;
-            int targetIdx = -1;
-            for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
+            string tempPokemon = players[currentTurn].pokemons[i].getName();
+            if ((healPokemon == tempPokemon) && (players[currentTurn].pokemons[i].getHp() > 0))
             {
-                string tempPokemon = players[currentTurn].pokemons[i].getName();
-                if (healPokemon == tempPokemon)
-                {
-                    targetIdx = i;
-                    found = true;
-                    continue;
-                }
+                Potion heal;
+                // call the function to used the potion
+                heal.update(players[currentTurn].pokemons[i], turnNumber);
 
-                if (!found)
-                {
-                    cout << "Invalid Pokemon to heal" << endl;
-                }
-
-                else
-                {
-                    // call the function to used the potion
-                    Potion heal;
-                    heal.update(players[currentTurn].pokemons[i]);
-                }
+                return true;
             }
         }
     }
     else if (potionInput == "Super Potion")
     {
-        cout << "Choose pokemon to used the potion : ";
-
-        for (int i = 0; i < players[0].pokemons.size(); i++)
+        for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
         {
-            cout << players[0].pokemons[i].getName() << " ";
-        }
-        cout << endl;
-
-        string healPokemon;
-        cin >> healPokemon;
-
-        if (healPokemon == "Exit")
-        {
-            // go back to the main menu
-            return false;
-        }
-        else
-        {
-            bool found = false;
-            int targetIdx = -1;
-            for (int i = 0; i < players[0].pokemons.size(); i++)
+            string tempPokemon = players[currentTurn].pokemons[i].getName();
+            if (healPokemon == tempPokemon && (players[currentTurn].pokemons[i].getHp() > 0))
             {
-                string tempPokemon = players[0].pokemons[i].getName();
-                if (healPokemon == tempPokemon)
-                {
-                    targetIdx = i;
-                    found = true;
-                    continue;
-                }
+                SuperPotion heal;
+                // call the function to used the potion
+                heal.update(players[currentTurn].pokemons[i], turnNumber);
 
-                if (!found)
-                {
-                    cout << "Invalid Pokemon to heal" << endl;
-                }
-
-                else
-                {
-                    // call the function to used the potion
-                    SuperPotion heal;
-                    heal.update(players[0].pokemons[i]);
-                }
+                return true;
             }
         }
     }
-
     else if (potionInput == "Hyper Potion")
     {
-        cout << "Choose pokemon to used the potion : ";
-
         for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
         {
-            cout << players[currentTurn].pokemons[i].getName() << " ";
-        }
-        cout << endl;
-
-        string healPokemon;
-        cin >> healPokemon;
-
-        if (healPokemon == "Exit")
-        {
-            // go back to the main menu
-            return false;
-        }
-
-        else
-        {
-            bool found = false;
-            int targetIdx = -1;
-            for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
+            string tempPokemon = players[currentTurn].pokemons[i].getName();
+            if (healPokemon == tempPokemon && (players[currentTurn].pokemons[i].getHp() > 0))
             {
-                string tempPokemon = players[currentTurn].pokemons[i].getName();
-                if (healPokemon == tempPokemon)
-                {
-                    targetIdx = i;
-                    found = true;
-                    continue;
-                }
+                HyperPotion heal;
+                // call the function to used the potion
+                heal.update(players[currentTurn].pokemons[i], turnNumber);
 
-                if (!found)
-                {
-                    cout << "Invalid Pokemon to heal" << endl;
-                }
-
-                else
-                {
-                    // call the function to used the potion
-                    HyperPotion heal;
-                    heal.update(players[currentTurn].pokemons[i]);
-                }
+                return true;
             }
         }
     }
-
     else if (potionInput == "Max Potion")
     {
-
-        cout << "Choose pokemon to used the potion : ";
-
         for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
         {
-            cout << players[currentTurn].pokemons[i].getName() << " ";
-        }
-        cout << endl;
-
-        string healPokemon;
-        cin >> healPokemon;
-
-        if (healPokemon == "Exit")
-        {
-            // go back to the main menu
-            return false;
-        }
-        else
-        {
-            bool found = false;
-            int targetIdx = -1;
-            for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
+            string tempPokemon = players[currentTurn].pokemons[i].getName();
+            if (healPokemon == tempPokemon && (players[currentTurn].pokemons[i].getHp() > 0))
             {
-                string tempPokemon = players[currentTurn].pokemons[i].getName();
-                if (healPokemon == tempPokemon)
-                {
-                    targetIdx = i;
-                    found = true;
-                    continue;
-                }
+                MaxPotion heal;
+                // call the function to used the potion
+                heal.update(players[currentTurn].pokemons[i], turnNumber);
 
-                if (!found)
-                {
-                    cout << "Invalid Pokemon to heal" << endl;
-                }
-                else
-                {
-                    // call the function to used the potion
-                    MaxPotion heal;
-                    heal.update(players[currentTurn].pokemons[i]);
-                }
+                return true;
             }
         }
     }
-    else
-    {
-        cout << "No such " << potionInput << "in the bag." << endl;
-    }
-    return true;
+
+    return false;
 }
 /**
  * @brief Game::loadTestCase
@@ -877,10 +715,10 @@ bool Game::loadGameData()
 /**
  * @brief Game::check
  */
-void Game::check()
+void Game::check(bool turn)
 {
-    Pokemon* pokemon = &players[currentTurn].pokemons[players[currentTurn].currentPokemon];
-   cout << "[Turn " << turnNumber << "] ";
+    Pokemon* pokemon = &players[turn].pokemons[players[turn].currentPokemon];
+    cout << "[Turn " << turnNumber << "] ";
     for(const auto& move : pokemon->getMoves())
     {
         cout<<move.getName()<<" "<<move.getPP()<<" ";
@@ -890,7 +728,7 @@ void Game::check()
 /**
  * @brief Game::status
  */
-void Game::status(int currentTurn)
+void Game::status()
 {
     Pokemon* pokemonOne,*pokemonTwo;
     if(players.size()<2||players[PLAYER_TURN].pokemons.size()==0||players[PLAYER_TURN].pokemons.size()==0)
@@ -900,9 +738,10 @@ void Game::status(int currentTurn)
     }
     pokemonOne = &players[PLAYER_TURN].pokemons[players[PLAYER_TURN].currentPokemon];
     pokemonTwo = &players[OPPONENT_TURN].pokemons[players[OPPONENT_TURN].currentPokemon];
-   cout << "[Turn " << turnNumber << "] ";
+    cout << "[Turn " << turnNumber << "] ";
+
     cout<<pokemonOne->getName()<<" "<<pokemonOne->getHp()<<" ";
-   for(int i=0;i<pokemonOne->getStateList().size();i++)
+    for(int i = 0; i < pokemonOne->getStateList().size(); i++)
     {
         if(pokemonOne->getStateList()[i]==true)
         {
@@ -910,8 +749,9 @@ void Game::status(int currentTurn)
         }
     }
     cout<<" ";
+
     cout<<pokemonTwo->getName()<<" "<<pokemonTwo->getHp()<<" ";
-    for(int i=0;i<pokemonTwo->getStateList().size();i++)
+    for(int i = 0; i < pokemonTwo->getStateList().size(); i++)
     {
         if(pokemonTwo->getStateList()[i]==true)
         {
@@ -923,11 +763,13 @@ void Game::status(int currentTurn)
 
 void Game::tellStory()
 {
-//    cout << "寶可夢是充滿著許多秘密的神祕生物。\n"
-//         << "一些寶可夢跟人類一起生活，一些是生活在野外草地\n"
-//         << "或是洞穴、或是海洋中，但很多關於他們的生態依舊是未知。\n"
-//         << "他們主要的特徵之一是一個精靈球收服他們，\n"
-//         << "這也讓他們能夠被隨身攜帶。" << endl;
+
+//    cout << "Pokemon are creatures of all shapes and sizes who live in the wild \n"
+//         << "or alongside their human partners (called “Trainers”).\n"
+//         << "During their adventures, Pokemon grow and become more experienced \n"
+//         << "and even, on occasion, evolve into stronger Pokemon.\n"
+//         << "Hundreds of known Pokemon inhabit the Pokemon universe, \n"
+//         << "with untold numbers waiting to be discovered!" << endl;
 }
 
 bool Game::checkAllDataLoaded()

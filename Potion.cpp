@@ -31,9 +31,11 @@
   * Pre: the 'Pokemon' passed in the parameter must be a valid 'Pokemon' with valid HP values.
   * Pos: Pokemon's HP restored and message is displayed.
   */
- void Potion::update(Pokemon& pokemon) // later write as virtual void update (Pokemon& pokemon);
+ void Potion::update(Pokemon& pokemon, int turnNumber) // later write as virtual void update (Pokemon& pokemon);
  {
+    cout << "[Turn " << turnNumber << "] ";
     cout << "You used a Potion!" << endl;
+    cout << "[Turn " << turnNumber << "] ";
     cout << pokemon.getName() << " had its HP restored." << endl;
     pokemon.restoreHP(healingAmount);
  }
@@ -61,9 +63,11 @@
   * Pre: the 'Pokemon' passed in the parameter must be a valid 'Pokemon' with valid HP values.
   * Pos: Pokemon's HP restored and message is displayed.
   */
- void SuperPotion::update(Pokemon& pokemon) // later write as virtual void update (Pokemon& pokemon);
+ void SuperPotion::update(Pokemon& pokemon, int turnNumber) // later write as virtual void update (Pokemon& pokemon);
  {
+    cout << "[Turn " << turnNumber << "] ";
     cout << "You used a Super Potion!" << endl;
+    cout << "[Turn " << turnNumber << "] ";
     cout << pokemon.getName() << " had its HP restored." << endl;
     pokemon.restoreHP(healingAmount);
  }
@@ -91,9 +95,11 @@
   * Pre: the 'Pokemon' passed in the parameter must be a valid 'Pokemon' with valid HP values.
   * Pos: Pokemon's HP restored and message is displayed.
   */
- void HyperPotion::update(Pokemon& pokemon) // later write as virtual void update (Pokemon& pokemon);
+ void HyperPotion::update(Pokemon& pokemon, int turnNumber) // later write as virtual void update (Pokemon& pokemon);
  {
+    cout << "[Turn " << turnNumber << "] ";
     cout << "You used a Hyper Potion!" << endl;
+    cout << "[Turn " << turnNumber << "] ";
     cout << pokemon.getName() << " had its HP restored." << endl;
     pokemon.restoreHP(healingAmount);
  }
@@ -122,9 +128,11 @@
   * Pre: the 'Pokemon' passed in the parameter must be a valid 'Pokemon' with valid HP values.
   * Pos: Pokemon's HP restored and message is displayed.
   */
- void MaxPotion::update(Pokemon& pokemon) // later write as virtual void update (Pokemon& pokemon);
+ void MaxPotion::update(Pokemon& pokemon, int turnNumber) // later write as virtual void update (Pokemon& pokemon);
  {
+    cout << "[Turn " << turnNumber << "] ";
     cout << "You used a Max Potion!" << endl;
+    cout << "[Turn " << turnNumber << "] ";
     cout << pokemon.getName() << " had its HP restored." << endl;
     pokemon.restoreHP(healingAmount);
  }
