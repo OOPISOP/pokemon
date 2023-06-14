@@ -25,7 +25,7 @@ public:
 	int getHealAmount();
 
 	//Redefinied function.
-	virtual void update(Pokemon& pokemon);
+    virtual void update(Pokemon& pokemon, int turnNumber);
 };
 
 
@@ -41,7 +41,7 @@ public:
 	int getHealAmount();
 
 	//Redefinied function.
-	void update(Pokemon& pokemon) override;
+    void update(Pokemon& pokemon, int turnNumber) override;
 };
 
 class HyperPotion : public Potion
@@ -56,7 +56,7 @@ public:
 	int getHealAmount();
 
 	//Redefinied function.
-	void update(Pokemon& pokemon) override;
+    void update(Pokemon& pokemon, int turnNumber) override;
 };
 
 class MaxPotion : public Potion
@@ -71,5 +71,5 @@ public:
 	int getHealAmount();
 
 	//Redefinied function.
-	void update(Pokemon& pokemon) override;
+    void update(Pokemon& pokemon, int turnNumber) override;
 };

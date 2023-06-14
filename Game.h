@@ -55,8 +55,8 @@ public:
     Q_INVOKABLE bool loadPokemonData();
     Q_INVOKABLE bool loadMoveData();
     Q_INVOKABLE bool loadGameData();
-    void check();
-    void status(int currentTurn);
+    void check(bool turn);
+    void status();
 
     /**
      * Intent: Execute command for QString

@@ -74,11 +74,11 @@ public:
     vector<bool> getStateList()const;
     //Setter
     //set Pokemon poisoned
-    void bePoisoned();
+    void bePoisoned(bool turn, int turnNumber);
     //set Pokemon paralysis
-    void beParalysis();
+    void beParalysis(bool turn, int turnNumber);
     //set Pokemon burned
-    void beBurned();
+    void beBurned(bool turn, int turnNumber);
 
     void setMoves(vector<Move>& moves);
     
@@ -109,5 +109,5 @@ public:
     void applyNegativeEffect();
 
     //use move
-    bool useMove(Pokemon& target, int moveIndex, int turnNumber);
+    bool useMove(Pokemon& target, int moveIndex, int turnNumber, bool turn);
 };

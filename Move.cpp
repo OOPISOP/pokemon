@@ -65,22 +65,18 @@ int Move::calcDamage(Pokemon& user,const Pokemon& target, int moveType)
     float typeTime = 1;
     for(const auto& userType : user.getTypes())//if user type equal to move type stab = 1.5,otherwise = 1
     {
-        if(type == userType)
+        if(attribute == userType)
         {
             stab = 1.5;
             break;
         }
     }
-    for(const auto&  time : target.getTypes())//type times calc
+
+    for(int time = 0; time < target.getTypes().size(); time++)//type times calc
     {
-        typeTime *= TYPE_EFFECT[type][time];
+        typeTime = typeTime * TYPE_EFFECT[attribute][target.getTypes()[time]];
     }
-
     user.effectiveness = typeTime;
-    cout << type << endl;
-    cout << time << endl;
-    cout << user.effectiveness << endl;
-
 
     int damage;
     if (moveType == PHYSICAL)

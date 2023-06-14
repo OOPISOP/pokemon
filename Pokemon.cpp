@@ -246,23 +246,43 @@ vector<bool> Pokemon::getStateList() const
 
 //Setter
 //set Pokemon poisoned
-void Pokemon::bePoisoned()
+void Pokemon::bePoisoned(bool turn, int turnNumber)
 {
     this->stateList[State::POISON_STATE] = true;
-    cout<<"<"<<this->name<<"> was poisoned!"<<endl;
+
+    // Output messege.
+    cout << "[Turn " << turnNumber << "] ";
+    if (turn == OPPONENT_TURN)
+    {
+        cout << "The opposing ";
+    }
+    cout << this->getName() << " was poisoned!" << endl;
 }
 //set Pokemon paralysis
-void Pokemon::beParalysis()
+void Pokemon::beParalysis(bool turn, int turnNumber)
 {
     this->stateList[State::PARALYSIS_STATE] = true;
-    cout<<"<"<<this->name<<"> is paralyzed, so it may be unable to move!"<<endl;
-    
+
+    // Output messege.
+    cout << "[Turn " << turnNumber << "] ";
+    if (turn == OPPONENT_TURN)
+    {
+        cout << "The opposing ";
+    }
+    cout << this->getName() << " is paralyzed, so it may be unable to move!" << endl;
 }
 //set Pokemon burned
-void Pokemon::beBurned()
+void Pokemon::beBurned(bool turn, int turnNumber)
 {
     this->stateList[State::BURN_STATE] = true;
-    cout<<"<"<<this->name<<"> was burned!"<<endl;
+
+    // Output messege.
+    cout << "[Turn " << turnNumber << "] ";
+    if (turn == OPPONENT_TURN)
+    {
+        cout << "The opposing ";
+    }
+    cout << this->getName() << " was burned!" << endl;
 }
 /**
  * Intent: Pokemon receive damage so reduce Pokemon Hp
@@ -346,7 +366,7 @@ void Pokemon::setMoves(vector<Move>& moves)
 */
 void Pokemon::poisonAttack(Pokemon& target)
 {
-    target.bePoisoned();
+    target.bePoisoned(true, true);
 }
 /**
  * Intent:paralysis attack
@@ -355,7 +375,7 @@ void Pokemon::poisonAttack(Pokemon& target)
 */
 void Pokemon::paralysisAttack(Pokemon& target)
 {   
-    target.beParalysis();
+    target.beParalysis(true, true);
 }
 /**
  * Intent:burn attack
@@ -364,7 +384,7 @@ void Pokemon::paralysisAttack(Pokemon& target)
 */
 void Pokemon::burnAttack(Pokemon& target)
 {
-    target.beBurned();
+    target.beBurned(true, true);
 }
 /**
  * Intent:effect Damage
@@ -385,7 +405,6 @@ void Pokemon::applyNegativeEffect()
 {
     if(isPoisoned())
     {
-        cout<<"<"<<this->name<<"> is hurt by its poisoning!"<<endl;
         receiveDamage(effectDamage());
     }
     else if(isBurned())
@@ -399,28 +418,12 @@ void Pokemon::applyNegativeEffect()
  * @param target
  * @param moveIndex
  */
-bool Pokemon::useMove(Pokemon& target,int moveIndex, int turnNumber)
+bool Pokemon::useMove(Pokemon& target, int moveIndex, int turnNumber, bool turn)
 {
     if(this->moves[moveIndex].getPP() <= 0)
     {
         cout<<"not enough pp"<<endl;
         return false;
-    }
-    if(moves[moveIndex].getCon() > 0)
-    {
-        int con = moves[moveIndex].getCon();
-        if(con == POISON_STATE)
-        {
-            target.bePoisoned();
-        }
-        else if(con == BURN_STATE)
-        {
-            target.beBurned();
-        }
-        else if(con == PARALYSIS_STATE)
-        {
-            target.beParalysis();
-        }
     }
     else
     {
@@ -437,9 +440,26 @@ bool Pokemon::useMove(Pokemon& target,int moveIndex, int turnNumber)
         target.receiveDamage(damage);
         moves[moveIndex].reducePP();
     }
-        cout << "[Turn " << turnNumber << "] ";
 
     cout<<this->name<<" used "<<moves[moveIndex].getName()<<"!"<<endl;
+//    cout << "effect: "<<effectiveness << endl;
+
+    if(moves[moveIndex].getCon() >= 0)
+    {
+        int con = moves[moveIndex].getCon();
+        if(con == POISON_STATE)
+        {
+            target.bePoisoned(turn, turnNumber);
+        }
+        else if(con == BURN_STATE)
+        {
+            target.beBurned(turn, turnNumber);
+        }
+        else if(con == PARALYSIS_STATE)
+        {
+            target.beParalysis(turn, turnNumber);
+        }
+    }
 
     if (moves[moveIndex].type != STATUS)
     {
