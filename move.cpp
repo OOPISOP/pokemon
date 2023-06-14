@@ -61,27 +61,27 @@ void Move::reducePP()
  */
 int Move::calcDamage(Pokemon& user, const Pokemon& target, int moveType, bool testMode, int turnNum)
 {
-//    bool hide = false;
+    bool hide = false;
 
-//    if (!testMode)
-//    {
-//        srand(time(NULL));
-//        int notCritical = rand() % 24;
-//        if (!notCritical)
-//        {
-//            critical = 2;
-//        }
+    if (!testMode)
+    {
+        srand(time(NULL));
+        int notCritical = rand() % 24;
+        if (!notCritical)
+        {
+            critical = 2;
+        }
 
-//        int notHide = rand() % (int)(100 / accuracy);
-//        if (!notHide)
-//        {
-//            hide = true;
-//            critical = 1;
-//        }
-//    }
+        int notHide = rand() % (int)(100 / accuracy);
+        if (!notHide)
+        {
+            hide = true;
+            critical = 1;
+        }
+    }
 
-//    if (!hide)
-//    {
+    if (!hide)
+    {
         float stab = 1;
         float typeTime = 1;
         for(const auto& userType : user.getTypes())//if user type equal to move type stab = 1.5,otherwise = 1
@@ -110,13 +110,13 @@ int Move::calcDamage(Pokemon& user, const Pokemon& target, int moveType, bool te
         }
 
         return damage;
-//    }
-//    else
-//    {
-//        cout << "[Turn " << turnNum << "] ";
-//        cout << target.getName() << " avoided the attack!" << endl;
+    }
+    else
+    {
+        cout << "[Turn " << turnNum << "] ";
+        cout << target.getName() << " avoided the attack!" << endl;
 
-//        return 0;
-//    }
+        return 0;
+    }
 }
 

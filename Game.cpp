@@ -400,7 +400,7 @@ bool Game::useBag()
         for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
         {
             string tempPokemon = players[currentTurn].pokemons[i].getName();
-            if (healPokemon == tempPokemon)
+            if ((healPokemon == tempPokemon) && (players[currentTurn].pokemons[i].getHp() > 0))
             {
                 Potion heal;
                 // call the function to used the potion
@@ -415,7 +415,7 @@ bool Game::useBag()
         for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
         {
             string tempPokemon = players[currentTurn].pokemons[i].getName();
-            if (healPokemon == tempPokemon)
+            if (healPokemon == tempPokemon && (players[currentTurn].pokemons[i].getHp() > 0))
             {
                 SuperPotion heal;
                 // call the function to used the potion
@@ -430,7 +430,7 @@ bool Game::useBag()
         for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
         {
             string tempPokemon = players[currentTurn].pokemons[i].getName();
-            if (healPokemon == tempPokemon)
+            if (healPokemon == tempPokemon && (players[currentTurn].pokemons[i].getHp() > 0))
             {
                 HyperPotion heal;
                 // call the function to used the potion
@@ -445,7 +445,7 @@ bool Game::useBag()
         for (int i = 0; i < players[currentTurn].pokemons.size(); i++)
         {
             string tempPokemon = players[currentTurn].pokemons[i].getName();
-            if (healPokemon == tempPokemon)
+            if (healPokemon == tempPokemon && (players[currentTurn].pokemons[i].getHp() > 0))
             {
                 MaxPotion heal;
                 // call the function to used the potion
@@ -624,21 +624,21 @@ void Game::status()
     cout << "[Turn " << turnNumber << "] ";
 
     cout<<pokemonOne->getName()<<" "<<pokemonOne->getHp()<<" ";
-    for(const auto state: pokemonOne->getStateList())
+    for(int i = 0; i < pokemonOne->getStateList().size(); i++)
     {
-        if(state==true)
+        if(pokemonOne->getStateList()[i]==true)
         {
-            cout<<stateToString(state);
+            cout<<stateToString(i);
         }
     }
     cout<<" ";
 
     cout<<pokemonTwo->getName()<<" "<<pokemonTwo->getHp()<<" ";
-    for(const auto state: pokemonTwo->getStateList())
+    for(int i = 0; i < pokemonTwo->getStateList().size(); i++)
     {
-        if(state==true)
+        if(pokemonTwo->getStateList()[i]==true)
         {
-            cout<<stateToString(state);
+            cout<<stateToString(i);
         }
     }
     cout<<endl;
