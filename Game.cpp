@@ -141,12 +141,19 @@ bool Game::executeCommand(string command)
         else if (command == "Bag" || bagTimes)
         {
             // Use potion.
+            if(bagTimes==0)
+            {
+                 useBag();
+            }
+            else if(bagTimes == 1)
+            {
+
+            }
             useBag();
 
+            bagTimes++;
             // Attack from second players.
-            string command2;
-            cin >> command2;
-            if(useMove(command2, !currentTurn, isTestMode))
+            if(useMove(command, !currentTurn, isTestMode))
             {
                 return false;
             }
@@ -454,12 +461,16 @@ void Game::bAndP()
     if (attackPokemon->isBurned())
     {
        cout << "[Turn " << turnNumber << "] ";
+        cout<<"The opposing ";
+       attackPokemon->applyNegativeEffect();
         cout << "<" << attackPokemon->getName() << ">";
         cout << " is hurt by its burn!" << endl;
     }
     if (attackPokemon->isPoisoned())
     {
        cout << "[Turn " << turnNumber << "] ";
+        cout<<"The opposing ";
+        attackPokemon->applyNegativeEffect();
         cout << "<" << attackPokemon->getName() << ">";
         cout << " is hurt by its poisoning!" << endl;
     }
@@ -486,12 +497,16 @@ void Game::bAndP()
     if (defendPokemon->isBurned())
     {
        cout << "[Turn " << turnNumber << "] ";
+        cout<<"The opposing ";
+        defendPokemon->applyNegativeEffect();
         cout << "<" << defendPokemon->getName() << ">";
         cout << " is hurt by its burn!" << endl;
     }
     if (defendPokemon->isPoisoned())
     {
        cout << "[Turn " << turnNumber << "] ";
+        cout<<"The opposing ";
+        defendPokemon->applyNegativeEffect();
         cout << "<" << defendPokemon->getName() << ">";
         cout << " is hurt by its poisoning!" << endl;
     }
@@ -526,8 +541,6 @@ bool Game::checkFainting(bool turn)
 
 bool Game::useBag()
 {
-    string potionInput;
-    cin >> potionInput;
 
     Pokemon& currPokemon = players[0].getPokemon();
 

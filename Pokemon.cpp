@@ -373,7 +373,7 @@ void Pokemon::burnAttack(Pokemon& target)
 */
 double Pokemon::effectDamage()
 {
-    return  getMaxHP() * (1/16);
+    return  this->maxHP/16;
 }
 
 /**
@@ -406,7 +406,6 @@ bool Pokemon::useMove(Pokemon& target,int moveIndex, int turnNumber)
         cout<<"not enough pp"<<endl;
         return false;
     }
-    cout<<"aaaaa"<<moves[moveIndex].getCon()<<endl;
     if(moves[moveIndex].getCon() >= 0)
     {
         int con = moves[moveIndex].getCon();

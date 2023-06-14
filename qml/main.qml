@@ -125,7 +125,6 @@ ApplicationWindow
                         text:"Pokemon"
                         onClicked:
                         {
-                            game.executeCommand("Pokemon")
                             stackView.push(swap)
                         }
                     }
@@ -170,10 +169,11 @@ ApplicationWindow
             height: 200
             Column {
                 Repeater {
-                    model: game.stringList.length
+                    model: game.onStringList.length
                     Button {
-                        text: game.stringList[index]
+                        text: game.onStringList[index]
                         onClicked: {
+                            game.executeCommand("Pokemon")
                             console.log("Button clicked: " + text)
                         }
                     }
