@@ -326,7 +326,7 @@ void Game::useMove(string moveName, bool turn, bool testMode)
     {
         cout << "The opposing ";
     }
-    attackPokemon->useMove(*defendPokemon, moveIndex, turnNumber, turn);
+    attackPokemon->useMove(*defendPokemon, moveIndex, turnNumber, turn, testMode);
 }
 
 // Intent:  To check B & P.

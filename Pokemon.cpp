@@ -417,7 +417,7 @@ void Pokemon::applyNegativeEffect()
  * @param target
  * @param moveIndex
  */
-bool Pokemon::useMove(Pokemon& target, int moveIndex, int turnNumber, bool turn)
+bool Pokemon::useMove(Pokemon& target, int moveIndex, int turnNumber, bool turn, bool testMode)
 {
     if(this->moves[moveIndex].getPP() <= 0)
     {
@@ -430,11 +430,11 @@ bool Pokemon::useMove(Pokemon& target, int moveIndex, int turnNumber, bool turn)
 
         if (moves[moveIndex].type == PHYSICAL)
         {
-            damage = moves[moveIndex].calcDamage(*this,target, PHYSICAL);
+            damage = moves[moveIndex].calcDamage(*this,target, PHYSICAL, testMode, turnNumber);
         }
         else if (moves[moveIndex].type == SPECIAL)
         {
-            damage = moves[moveIndex].calcDamage(*this,target, SPECIAL);
+            damage = moves[moveIndex].calcDamage(*this,target, SPECIAL, testMode, turnNumber);
         }
         target.receiveDamage(damage);
         moves[moveIndex].reducePP();
@@ -484,6 +484,12 @@ bool Pokemon::useMove(Pokemon& target, int moveIndex, int turnNumber, bool turn)
                 cout << "It's not effective!" << endl;
             }
         }
+    }
+
+    if (moves[moveIndex].critical > 1)
+    {
+        cout << "[Turn " << turnNumber << "] ";
+        cout << "A critical hit!" << endl;
     }
 
     return true;
