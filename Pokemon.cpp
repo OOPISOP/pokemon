@@ -151,6 +151,8 @@ Pokemon& Pokemon::operator=(Pokemon &aPokemon)
    this->spAtk = aPokemon.spAtk;
    this->spDef = aPokemon.spDef;
    this->speed = aPokemon.speed;
+
+   return *this;
 }
 
 //Getter
