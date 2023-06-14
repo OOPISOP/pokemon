@@ -36,7 +36,8 @@ private:
     double speed;//Pokemon Speed
 
 public:
-
+    // For Effevive message.
+    float effectiveness;
     //Pokemon Constructor
     Pokemon();
     Pokemon(string name, vector<Attribute> types, int maxHP, double atk, double def, double spAtk, double spDef, double speed);
@@ -108,5 +109,5 @@ public:
     void applyNegativeEffect();
 
     //use move
-    bool useMove(Pokemon& target,int moveIndex);
+    bool useMove(Pokemon& target, int moveIndex, int turnNumber);
 };

@@ -30,6 +30,9 @@ class Game : public QObject
 public:
     bool currentTurn;
     bool isTestMode;
+    int turnNumber;
+    bool playable;
+    bool winOrLose;
     vector<Player> players;
     vector<Pokemon> pokemons;   // Library of Pokemons
     vector<Move> moves;         // Library of Pokemon Move
@@ -41,6 +44,8 @@ public:
     int bagTimes = 0;
     int pokemonTimes = 0;
     int battleTimes = 0;
+    bool flag = 0;
+    bool isRand = false;
     //Game Constructor
     Game();
     //Game Destructor
@@ -52,17 +57,19 @@ public:
      * Pos:return true or false
      */
     bool executeCommand(string command);
-    bool useBag();
-    Q_INVOKABLE bool loadTestCase();
-    bool loadTestCase(string fileName);
-    Q_INVOKABLE bool loadPokemonData();
-    Q_INVOKABLE bool loadMoveData();
-    Q_INVOKABLE bool loadGameData();
-    void check();
-    void status(int currentTurn);
-    Q_INVOKABLE bool checkAllDataLoaded();
-    Q_INVOKABLE QString getMoveName(int index);
-    Q_INVOKABLE QString getCurrentStatus(int index);
+    bool useBag();//use bag
+    Q_INVOKABLE bool loadTestCase();//load test case from ui
+    bool loadTestCase(string fileName);//load test case from cli
+    Q_INVOKABLE bool loadPokemonData();//load pokemon data
+    Q_INVOKABLE bool loadMoveData();//load move data
+    Q_INVOKABLE bool loadGameData();//load game data
+    void check();//check command
+    void status(int currentTurn);//status command
+    Q_INVOKABLE bool checkAllDataLoaded();//check all data is loaded
+    Q_INVOKABLE QString getMoveName(int index);//get move name
+    Q_INVOKABLE QString getCurrentStatus(int index);//get current status
+    Q_INVOKABLE void randomMove();
+
     /**
      * Intent: Execute command for QString
      * Pre:
@@ -78,13 +85,23 @@ public:
     // Check whether move exists and find index.
     int findMove(Pokemon &aPokemon, string moveName);
     // Swap Pokemon.
-    void swapPokemon(bool turn, string pokemon1, string pokemon2);
+    void swapPokemon(bool turn,string command);
     // Use a potion in bag to a Pokemon.
     void usePotion(bool turn, string targetPokemon, string potionName);
     // Use a move to the opponent Pokemon.
-    void useMove(string moveName, bool turn, bool testMode);
+    bool useMove(string moveName, bool turn, bool testMode);
     // Check Pokemon's faint status.
     bool checkFainting(bool turn);
+    // To check B & P.
+    void bAndP();
+    vector<string> findAvailablePokemon(int turn);
+    // Tell user about Pokemon's story.
+    void tellStory();
+    QStringList getStringList(vector<string> v);
+
+signals:
+    void updatePokemonInfo();
+    void stringList(QStringList list);
 };
 
 

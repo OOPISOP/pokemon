@@ -87,9 +87,11 @@ bool DataFormat::loadMoveData(string fileName, Game *game)
         return false;
     }
     game->moves.clear();
-    string name,line,attributeString,typeString;
+
+    string name,attributeString,typeString;
     int attribute,type,power,accuracy,pp,isCon;
-    string buffer;
+    string buffer, line;
+
     while(getline(moveDataFile,line))
     {
         int con = -1;

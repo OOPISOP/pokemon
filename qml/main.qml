@@ -1,4 +1,4 @@
-import QtQuick 2
+import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.3
 import com.game 1.0
@@ -126,6 +126,7 @@ ApplicationWindow
                         onClicked:
                         {
                             game.executeCommand("Pokemon")
+                            stackView.push(swap)
                         }
                     }
                     Button
@@ -163,6 +164,37 @@ ApplicationWindow
     }
     Component
     {
+        id:swap
+        Item {
+            width: 200
+            height: 200
+            Column {
+                Repeater {
+                    model: game.stringList.length
+                    Button {
+                        text: game.stringList[index]
+                        onClicked: {
+                            console.log("Button clicked: " + text)
+                        }
+                    }
+                }
+            }
+            Button
+            {
+                x:250
+                y:300
+                id:blackSwap
+                text:"back"
+                onClicked:
+                {
+                    stackView.pop()
+                }
+            }
+        }
+    }
+
+    Component
+    {
         id: moveButtons
         Item
         {
@@ -176,7 +208,6 @@ ApplicationWindow
                 {
                     game.executeCommand("Battle")
                      game.executeCommand(game.getMoveName(0))
-                    playerTwo.text =  game.getCurrentStatus(1)
                     stackView.pop()
                 }
             }
@@ -230,6 +261,16 @@ ApplicationWindow
                     stackView.pop()
                 }
             }
+        }
+    }
+
+    Connections
+    {
+        target:game
+        function onUpdatePokemonInfo()
+        {
+            playerOne.text =  game.getCurrentStatus(0)
+           playerTwo.text =  game.getCurrentStatus(1)
         }
     }
 }

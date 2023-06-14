@@ -100,7 +100,7 @@ string stateToString(int state)
     }
     else if(state == PARALYSIS_STATE)
     {
-        return "PSN";
+        return "PAR";
     }
     else if(state == FAINTING_STATE)
     {
@@ -151,6 +151,8 @@ Pokemon& Pokemon::operator=(Pokemon &aPokemon)
    this->spAtk = aPokemon.spAtk;
    this->spDef = aPokemon.spDef;
    this->speed = aPokemon.speed;
+
+   return *this;
 }
 
 //Getter
@@ -253,7 +255,7 @@ void Pokemon::bePoisoned()
 void Pokemon::beParalysis()
 {
     this->stateList[State::PARALYSIS_STATE] = true;
-     cout<<"<"<<this->name<<"> is paralyzed, so it may be unable to move!"<<endl;
+    cout<<"<"<<this->name<<"> is paralyzed, so it may be unable to move!"<<endl;
     
 }
 //set Pokemon burned
@@ -397,14 +399,15 @@ void Pokemon::applyNegativeEffect()
  * @param target
  * @param moveIndex
  */
-bool Pokemon::useMove(Pokemon& target,int moveIndex)
+bool Pokemon::useMove(Pokemon& target,int moveIndex, int turnNumber)
 {
     if(this->moves[moveIndex].getPP() <= 0)
     {
         cout<<"not enough pp"<<endl;
         return false;
     }
-    if(moves[moveIndex].getCon() > 0)
+    cout<<"aaaaa"<<moves[moveIndex].getCon()<<endl;
+    if(moves[moveIndex].getCon() >= 0)
     {
         int con = moves[moveIndex].getCon();
         if(con == POISON_STATE)
@@ -422,11 +425,49 @@ bool Pokemon::useMove(Pokemon& target,int moveIndex)
     }
     else
     {
-        int damage = moves[moveIndex].calcDamage(*this,target);
+        int damage;
+
+        if (moves[moveIndex].type == PHYSICAL)
+        {
+            damage = moves[moveIndex].calcDamage(*this,target, PHYSICAL);
+        }
+        else if (moves[moveIndex].type == SPECIAL)
+        {
+            damage = moves[moveIndex].calcDamage(*this,target, SPECIAL);
+        }
         target.receiveDamage(damage);
         moves[moveIndex].reducePP();
     }
-    cout<<"<"<<this->name<<"> used <"<<moves[moveIndex].getName()<<">!"<<endl;
+        cout << "[Turn " << turnNumber << "] ";
+
+    cout<<this->name<<" used "<<moves[moveIndex].getName()<<"!"<<endl;
+
+    if (moves[moveIndex].type != STATUS)
+    {
+        // Output additional effect message.
+        if (effectiveness >= 2)
+        {
+            cout << "[Turn " << turnNumber << "] ";
+            cout << "It's super effective!" << endl;
+        }
+        else if (effectiveness <= 0.5)
+        {
+            cout << "[Turn " << turnNumber << "] ";
+            cout << "It's not very effective..." << endl;
+        }
+        else if (effectiveness == 0)
+        {
+            if (moves[moveIndex].getCon() > 0)
+            {
+            }
+            else
+            {
+                cout << "[Turn " << turnNumber << "] ";
+                cout << "It's not effective!" << endl;
+            }
+        }
+    }
+
     return true;
 }
 
