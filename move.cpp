@@ -59,10 +59,10 @@ void Move::reducePP()
  * @param target
  * @return move damage
  */
-int Move::calcDamage(const Pokemon& user,const Pokemon& target)
+int Move::calcDamage(const Pokemon& user,const Pokemon& target, int moveType)
 {
     float stab = 1;
-    int typeTime = 1;
+    float typeTime = 1;
     for(const auto& userType : user.getTypes())//if user type equal to move type stab = 1.5,otherwise = 1
     {
         if(type == userType)
@@ -75,7 +75,17 @@ int Move::calcDamage(const Pokemon& user,const Pokemon& target)
     {
         typeTime *= TYPE_EFFECT[type][time];
     }
-    int damage = (int)(0.44*power*(user.getAtk()/target.getDef())+2)*critical*stab*typeTime;//damage calc
+
+    int damage;
+    if (moveType == PHYSICAL)
+    {
+        damage = (int)(0.44*power*(user.getAtk()/target.getDef())+2)*critical*stab*typeTime;//damage calc
+    }
+    else if (moveType == SPECIAL)
+    {
+        damage = (int)(0.44*power*(user.getSpAtk()/target.getSpDef())+2)*critical*stab*typeTime;//damage calc
+    }
+
     return damage;
 }
 

@@ -397,7 +397,7 @@ void Pokemon::applyNegativeEffect()
  * @param target
  * @param moveIndex
  */
-bool Pokemon::useMove(Pokemon& target,int moveIndex)
+bool Pokemon::useMove(Pokemon& target,int moveIndex, int turnNumber)
 {
     if(this->moves[moveIndex].getPP() <= 0)
     {
@@ -422,9 +422,44 @@ bool Pokemon::useMove(Pokemon& target,int moveIndex)
     }
     else
     {
-        int damage = moves[moveIndex].calcDamage(*this,target);
+        int damage;
+
+        if (moves[moveIndex].type == PHYSICAL)
+        {
+            damage = moves[moveIndex].calcDamage(*this,target, PHYSICAL);
+        }
+        else if (moves[moveIndex].type == SPECIAL)
+        {
+            damage = moves[moveIndex].calcDamage(*this,target, SPECIAL);
+        }
         target.receiveDamage(damage);
         moves[moveIndex].reducePP();
+
+        if (moves[moveIndex].type != STATUS)
+        {
+            // Output additional effect message.
+            if (damage >= 2)
+            {
+                cout << "[Turn " << turnNumber << "] ";
+                cout << "It's super effective!" << endl;
+            }
+            else if (damage <= 0.5)
+            {
+                cout << "[" << turnNumber << "] ";
+                cout << "It's not very effective..." << endl;
+            }
+            else if (damage == 0)
+            {
+                if (moves[moveIndex].getCon() > 0)
+                {
+                }
+                else
+                {
+                    cout << "[" << turnNumber << "] ";
+                    cout << "It's not effective!" << endl;
+                }
+            }
+        }
     }
     cout<<"<"<<this->name<<"> used <"<<moves[moveIndex].getName()<<">!"<<endl;
     return true;
